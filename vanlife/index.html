@@ -125,6 +125,16 @@
 			   font-weight: 300;
 			}
 			
+			@font-face {
+				font-family: 'Beyno';
+				src: url('beyno.otf')  format('truetype');
+			}
+			
+			body.wakanda {
+				font-family: "Beyno";
+				text-transform: uppercase;
+			}
+			
 			div#map,
 			div#calendar {
 				top: 0;
@@ -265,6 +275,10 @@
 		</div>
 		
 		<script>
+			
+			if (-1 !== location.search.indexOf("wakanda")) {
+				$("body").addClass("wakanda");
+			}
 			
 			function addEventTableViewRow(day, title, location, index) {
 				const dayView = $("<div>", {"class": "day"});
