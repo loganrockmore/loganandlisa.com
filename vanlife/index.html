@@ -604,7 +604,10 @@
 								const formattedDistance = distanceMiles.toFixed(0);
 								$("#distance-" + index).text('drive ' + formattedDistance + ' miles');
 								
-								const days = parseInt($("#daysInBetween-" + index).text());
+								let days = parseInt($("#daysInBetween-" + index).text());
+								if (days === 0) {
+									days = 1;
+								}
 								const milesPerDay = distanceMiles/days;
 								const formattedDistancePerDay = milesPerDay.toFixed(0);
 								$("#distancePerDay-" + index).text('average ' + formattedDistancePerDay + ' miles per day');
