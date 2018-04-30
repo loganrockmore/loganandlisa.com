@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Logan and Lisa - Seattle</title>
+		<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+		
+	    <script src='../jquery-3.3.1.min.js'></script>
+		
+		<style>
+			
+			body {
+				margin: 0;
+				padding: 0;
+				
+				font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+				font-weight: 300;
+				font-size: 1em;
+				background-color: #fefaef;
+			}
+			
+			div#backgroundContainer {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				overflow: hidden;
+				z-index: -1;
+			}
+			
+			div#background {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 1000%;
+				background-image: url('../1280x1280@2x.png');
+			    background-size: 1280px 1280px;
+				background-position: center 0px;
+				opacity: 0.15;
+			}
+			
+			@media only screen and (min-width: 1280px) {
+							
+				div#background {
+				    background-size: contain;
+				}
+			}
+			
+			
+			
+			div#center {
+				margin: 0 auto;
+				text-align: center;
+			}
+			
+			
+			
+			img#headertext {
+				width: 45em;
+				display: block;
+				margin: 5em auto;
+			}
+			
+			@media only screen and (max-width: 55em) {
+							
+				img#headertext {
+					width: 80%;
+				}
+			}
+			
+			div#menu {
+				background: black;
+				display: inline-block;
+				padding: 0 0.5em;
+			}
+			
+			div#menu > a {
+				color: white;
+				text-decoration: none;
+				padding: 1em;
+				margin: 0 0.2em;
+				display: inline-block;
+			}
+			
+			div#menu > a:hover {
+				background: rgba(4, 145, 4, 0.75);
+			}
+			
+			div#menu > a.selected {
+				background: rgba(4, 145, 4, 0.75);
+			}
+			
+			div#menuLine {
+				background: black;
+				height: 1em;
+				width: 40em;
+				margin: -1.5em auto 1.5em auto;
+				height: 0.25em;
+				border-radius: 0.25em;
+			}
+			
+			@media only screen and (max-width: 60em) {
+							
+				div#menuLine {
+					width: 30em;
+				}
+			}
+			
+			div#dateplace {
+				margin: 7em auto 0 auto;
+			}
+			
+			div#dateplace > img {
+				width: 30em;
+			}
+			
+			@media only screen and (max-width: 55em) {
+							
+				div#dateplace > img {
+					width: 60%;
+				}
+			}
+			
+			
+			
+			
+			
+			div#content {
+				width: 40em;
+				margin: 0 auto;
+			}
+			
+			@media only screen and (max-width: 60em) {
+							
+				div#content {
+					width: 30em;
+				}
+			}
+			
+			
+			
+			
+			
+			div#content > div.white {
+				padding: 2em;
+				text-align: left;
+				line-height: 1.4em;
+			}
+			
+			div#content div.greenTopBorder {
+				height: 0.25em;
+				background-color: rgba(4, 145, 4, 0.75);
+				border-radius: 0.25em;
+			}
+			
+			div#content > img.contentTitle {
+				height: 2em;
+				margin-bottom: 1em;
+			}
+			
+			div#content > div > a {
+				color: black;
+				text-decoration: none;
+				border-bottom: 1px dashed black;
+			}
+			
+			div#content > div > a:hover {
+				background-color: rgba(0, 0, 0, 0.1);
+			}
+			
+			div#content > div#locationContent {
+				height: 30em;
+				text-align: left;
+			}
+			
+			div#content > div#locationContent > iframe {
+				width: 50%;
+				height: 100%;
+			}
+			
+			div#content > div#locationContent > div#locationPhotos {
+				width: 48%;
+				height: 100%;
+				display: inline-block;
+				background-image: url('islandwood1.jpg');
+				background-size: cover;
+				background-position: left top;
+			}
+			
+			
+			
+			img.flourish {
+				width: 5em;
+				margin: 3em auto 3em auto;
+				display: block;
+			}
+			
+			
+			
+			
+			div#content > div#friday {
+				margin-right: 6em;
+			}
+			
+			div#content > div#saturday {
+				margin-left: 3em;
+				margin-right: 3em;
+			}
+			
+			div#content > div#sunday {
+				margin-left: 6em;
+			}
+			
+			div#content > div.day {
+				text-align: left;
+			}
+			
+			div#content > div.day > div.dayContent {
+				padding: 2em;
+				padding-bottom: 3em;
+			}
+			
+			div#content > div.day > div.dayContent > span {
+				font-weight: 800;
+			}
+			
+			div#content > div.day > div.dayContent > ul {
+				list-style-type: none;
+				padding: 0;
+			}
+			
+			div#content > div.day > div.dayContent > ul > li {
+				margin-bottom: 0.5em;
+			}
+			
+			
+			
+			
+			div#mapboxAttribution {
+				font-size: 0.85em;
+				text-align: center;
+				margin-top: 5em;
+				margin-bottom: 1em;
+				color: #666;
+			}
+			
+			div#mapboxAttribution a {
+				color: #666;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="backgroundContainer">
+			<div id="background"></div>
+		</div>
+		
+		<div id="center">
+			<img src="../headertext.png" id="headertext" />
+			
+			<div id="menu">
+				<a href="../">About</a>
+				<a href="../seattle" class="selected">Seattle, WA</a>
+				<a href="../lacrosse">La Crosse, WI</a>
+				<a href="../rsvp">RSVP</a>
+			</div>
+			<div id="menuLine"></div>
+			
+			<div id="dateplace">
+				<img src="../titleimages/dateplace-seattle.png" />
+			</div>
+			
+			<img src="../titleimages/flourish.png" class="flourish" />
+			
+			<div id="content">
+				<img src="../titleimages/location.png" class="contentTitle" />
+				
+				<div class="greenTopBorder"></div>
+				<div class="white">
+					The <a href="https://islandwood.org/gatherings-and-events/weddings" target="_blank">Islandwood Environmental Learning Center</a> is located just across the Elliott Bay from downtown Seattle.  The easiest way to get there from SeaTac is to take the Link light rail to Pioneer Square Station (about 30 minutes), walk to the ferry terminal and then take the Seattle - Bainbridge Island ferry (about 35 minutes).  A shuttle will be available at the Bainbridge Island ferry terminal to take guests to Islandwood.
+				</div>
+				
+				<div id="locationContent">
+					<iframe
+					  frameborder="0"
+					  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDUuK6GhRB-k-FgqYnUj6CeLBjxquGzkF8
+					    &q=Islandwood,Bainbridge+Island&zoom=9.5">
+					</iframe>
+					<div id="locationPhotos">
+					</div>
+				</div>
+			</div>
+			
+			<img src="../titleimages/flourish.png" class="flourish" />
+			
+			<div id="content">
+				<img src="../titleimages/accommodations.png" class="contentTitle" />
+				
+				<div class="greenTopBorder"></div>
+				<div class="white">
+					All guests will be able to stay on Bainbridge Island for the weekend and more details will be provided by Logan and Lisa via email shortly.
+				</div>
+			</div>
+			
+			<img src="../titleimages/flourish.png" class="flourish" />
+			
+			<div id="content">
+				<img src="../titleimages/schedule.png" class="contentTitle" />
+				
+				<div class="day" id="friday">
+					<div class="greenTopBorder"></div>
+					<div class="dayContent">
+						<span class="title">
+							Friday, October 26
+						</span>
+						<ul>
+							<li>Arrival starts at 4pm</li>
+							<li>Dinner</li>
+							<li>Late Night Campfire and Smores</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="day" id="saturday">
+					<div class="greenTopBorder"></div>
+					<div class="dayContent">
+						<span class="title">
+							Saturday, October 27
+						</span>
+						<ul>
+							<li>Breakfast</li>
+							<li>Activities</li>
+							<li>Lunch</li>
+							<li>Even More Activities</li>
+							<li>Ceremony</li>
+							<li>Reception</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="day" id="sunday">
+					<div class="greenTopBorder"></div>
+					<div class="dayContent">
+						<span class="title">
+							Sunday, October 28
+						</span>
+						<ul>
+							<li>Breakfast</li>
+							<li>Departure at 11am</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+			<div id="mapboxAttribution">
+				&copy; <a href='https://www.mapbox.com/about/maps/' target="_blank">Mapbox</a> &copy; <a href='http://www.openstreetmap.org/copyright' target="_blank">OpenStreetMap</a> <a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a>
+			</div>
+		</div>
+		
+		<script>
+			
+			var scrollMultiplier = 2;
+			
+			window.addEventListener("scroll", function(event) {
+				
+				// reposition the background
+				var top = this.pageYOffset;
+				var value = top / scrollMultiplier;
+				$("#background").css("transform", "translate3d(0px, -" + value + "px, 0px)");
+			});
+			
+		</script>
+	</body>
+</html>
