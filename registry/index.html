@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Logan and Lisa</title>
+		<title>Logan and Lisa - Registry</title>
 		<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 		
-	    <script src='jquery-3.3.1.min.js'></script>
+	    <script src='../jquery-3.3.1.min.js'></script>
 		
 		<style>
 			
@@ -34,9 +34,7 @@
 				left: 0;
 				right: 0;
 				height: 1000%;
-				
-				/* https://api.mapbox.com/styles/v1/loganrockmore/cjcy0fiha1mij2spckt0ze2la/static/-123.613,47.738,15.5,0.00,0.00/1280x1280@2x?attribution=false&logo=false&access_token=pk.eyJ1IjoibG9nYW5yb2NrbW9yZSIsImEiOiJjamN4enNnejUwdnoyMnJuc2tzY2c0MDFxIn0.CMNRIENkQE7xCueDY7N5Ag */
-				background-image: url('1280x1280@2x.png');
+				background-image: url('../1280x1280@2x.png');
 			    background-size: 1280px 1280px;
 				background-position: center 0px;
 				opacity: 0.15;
@@ -109,12 +107,93 @@
 				}
 			}
 			
+			div#dateplace {
+				margin: 7em auto 0 auto;
+			}
+			
+			div#dateplace > img {
+				width: 30em;
+			}
+			
+			@media only screen and (max-width: 55em) {
+							
+				div#dateplace > img {
+					width: 60%;
+				}
+			}
 			
 			
-			img.photo {
-				margin: 5em auto 0 auto;
+			
+			
+			
+			div#content {
 				width: 40em;
-				border: 1px solid black;
+				margin: 0 auto;
+			}
+			
+			@media only screen and (max-width: 60em) {
+							
+				div#content {
+					width: 30em;
+				}
+			}
+			
+			
+			
+			
+			
+			div#content > div.white {
+				padding: 2em;
+				text-align: left;
+				line-height: 1.4em;
+			}
+			
+			div#content div.greenTopBorder {
+				height: 0.25em;
+				background-color: rgba(4, 145, 4, 0.75);
+				border-radius: 0.25em;
+			}
+			
+			div#content > img.contentTitle {
+				height: 2em;
+				margin-bottom: 1em;
+			}
+			
+			div#content > div > a {
+				color: black;
+				text-decoration: none;
+				border-bottom: 1px dashed black;
+			}
+			
+			div#content > div > a:hover {
+				background-color: rgba(0, 0, 0, 0.1);
+			}
+			
+			div#content > div#locationContent {
+				height: 30em;
+				text-align: left;
+			}
+			
+			div#content > div#locationContent > iframe {
+				width: 50%;
+				height: 100%;
+			}
+			
+			div#content > div#locationContent > div#locationPhotos {
+				width: 48%;
+				height: 100%;
+				display: inline-block;
+				background-image: url('courtabovemain.jpg');
+				background-size: cover;
+				background-position: left top;
+			}
+			
+			
+			
+			img.flourish {
+				width: 5em;
+				margin: 3em auto 3em auto;
+				display: block;
 			}
 			
 			
@@ -123,7 +202,7 @@
 			div#mapboxAttribution {
 				font-size: 0.85em;
 				text-align: center;
-				margin-top: 10em;
+				margin-top: 5em;
 				margin-bottom: 1em;
 				color: #666;
 			}
@@ -140,18 +219,20 @@
 		</div>
 		
 		<div id="center">
-			<img src="headertext.png" id="headertext" />
+			<img src="../headertext.png" id="headertext" />
 			
 			<div id="menu">
-				<a href="." class="selected">About</a>
-				<a href="seattle">Seattle, WA</a>
-				<a href="lacrosse">La Crosse, WI</a>
-				<a href="rsvp">RSVP</a>
-				<a href="registry">Registry</a>
+				<a href="../">About</a>
+				<a href="../seattle">Seattle, WA</a>
+				<a href="../lacrosse">La Crosse, WI</a>
+				<a href="../rsvp">RSVP</a>
+				<a href="../registry" class="selected">Registry</a>
 			</div>
 			<div id="menuLine"></div>
 			
-			<img src="index.jpg" class="photo" />
+			<div id="content" style="margin-top: 5em;">
+				Registry details will be coming soon!
+			</div>
 			
 			<div id="mapboxAttribution">
 				&copy; <a href='https://www.mapbox.com/about/maps/' target="_blank">Mapbox</a> &copy; <a href='http://www.openstreetmap.org/copyright' target="_blank">OpenStreetMap</a> <a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a>
