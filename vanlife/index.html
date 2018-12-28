@@ -1,0 +1,804 @@
+<html>
+	<head>
+		<title>Vanlife Map</title>
+		<link rel="apple-touch-icon" href="apple-touch-icon.png?modified=1" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+		
+		<script>
+			
+			const events = [
+				{
+					title: 'Wedding',
+					startDate: date(2018, 10, 26),
+					endDate: date(2018, 10, 28),
+					location: 'Seattle, WA',
+				},
+				{
+					title: 'Clusterfest and Giants Retro Fanny Pack',
+					startDate: date(2018, 6, 1),
+					endDate: date(2018, 6, 3),
+					location: 'San Francisco, CA',
+				},
+				{
+					title: 'Loggers Game and Wedding Planning',
+					startDate: date(2018, 7, 20),
+					endDate: date(2018, 7, 21),
+					location: 'La Crosse, WI',
+				},
+				{
+					title: 'Bougie 4th of July',
+					startDate: date(2018, 7, 1),
+					endDate: date(2018, 7, 7),
+					location: 'Hamptons, NY',
+				},
+				{
+					title: 'Wisconsin Thanksgiving and Wedding',
+					startDate: date(2018, 11, 22),
+					endDate: date(2018, 11, 25),
+					location: 'La Crosse, WI',
+				},
+				{
+					title: 'Burning Man',
+					startDate: date(2018, 8, 26),
+					endDate: date(2018, 9, 3),
+					location: 'Black Rock City, NV',
+				},
+				{
+					title: 'Ozone\'s Wedding',
+					startDate: date(2018, 4, 28),
+					endDate: date(2018, 4, 28),
+					location: 'San Francisco, CA',
+				},
+				{
+					title: 'Taylor\'s Baby Shower',
+					startDate: date(2018, 6, 23),
+					endDate: date(2018, 6, 23),
+					location: 'San Diego, CA',
+				},
+				{
+					title: 'Barry Bonds\' Number Retirement',
+					startDate: date(2018, 8, 11),
+					endDate: date(2018, 8, 11),
+					location: 'San Francisco, CA',
+				},
+				{
+					title: 'Wedding with Caroline',
+					startDate: date(2018, 6, 9),
+					endDate: date(2018, 6, 10),
+					location: 'Mexico City, Mexico',
+					flyIn: true,
+					flyOut: true,
+				},
+				{
+					title: 'Birthday Weekend Game House',
+					startDate: date(2018, 11, 15),
+					endDate: date(2018, 11, 18),
+					location: 'Orlando, FL',
+				},
+				{
+					title: 'Engagement Photo Session',
+					startDate: date(2018, 5, 27),
+					endDate: date(2018, 5, 27),
+					location: 'Seattle, WA',
+				},
+				{
+					title: 'Seattle Wedding Check-in',
+					startDate: date(2018, 8, 4),
+					endDate: date(2018, 8, 4),
+					location: 'Seattle, WA',
+				},
+				{
+					title: 'Be in Seattle for Flight',
+					startDate: date(2018, 5, 20),
+					endDate: date(2018, 5, 20),
+					location: 'Seattle, WA',
+				},
+				{
+					title: 'Memorial Day Weekend with Chelsea and Ryan',
+					startDate: date(2018, 5, 21),
+					endDate: date(2018, 5, 26),
+					location: 'Austin, TX',
+					flyIn: true,
+					flyOut: true,
+				},
+				{
+					title: 'Jess and Jesse\'s Baby Shower',
+					startDate: date(2018, 5, 6),
+					endDate: date(2018, 5, 6),
+					location: 'San Francisco, CA',
+				},
+				{
+					title: 'Wedding Dress Check-in',
+					startDate: date(2018, 8, 18),
+					endDate: date(2018, 8, 18),
+					location: 'Mesa, AZ',
+				},
+				{
+					title: 'Last Day in Pittsburgh',
+					startDate: date(2018, 4, 21),
+					endDate: date(2018, 4, 21),
+					location: 'Pittsburgh, PA',
+				},
+				{
+					title: 'Unpack in Storage Unit',
+					startDate: date(2018, 4, 26),
+					endDate: date(2018, 4, 26),
+					location: 'Reno, NV',
+				},
+				{
+					title: 'Avengers: Infinity War',
+					startDate: date(2018, 4, 26),
+					endDate: date(2018, 4, 26),
+					location: 'San Francisco, CA',
+				},
+				{
+					title: 'Sketchfest',
+					startDate: date(2019, 1, 11),
+					endDate: date(2019, 1, 20),
+					location: 'San Francisco, CA',
+				},
+				{
+					title: 'Bman\'s Wedding',
+					startDate: date(2019, 2, 7),
+					endDate: date(2019, 2, 11),
+					location: 'Austin, TX',
+				},
+				{
+					title: 'Spring Training',
+					startDate: date(2019, 3, 20),
+					endDate: date(2019, 3, 22),
+					location: 'Phoenix, AZ',
+				}
+			];
+			
+			function date(year, month, day) {
+				return new Date(year, month-1, day);
+			}
+			
+		</script>
+		
+		<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+		<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<script src="lodash.min.js"></script>
+		<script src="jquery.min.js"></script>
+		<script src="jquery-datepicker.min.js"></script>
+		<script src="moment.min.js"></script>
+		<script src="turf.min.js"></script>
+		
+		<style>
+			
+			body {
+				margin: 0px;
+				padding: 0px;
+				font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+			   font-weight: 300;
+			}
+			
+			@font-face {
+				font-family: 'Beyno';
+				src: url('beyno.otf')  format('truetype');
+			}
+			
+			body.wakanda {
+				font-family: "Beyno";
+				text-transform: uppercase;
+			}
+			
+			div#map,
+			div#calendar {
+				top: 0;
+				bottom: 0;
+			}
+			
+			div#map {
+				position: fixed;
+				left: 0;
+				width: 70%;
+			}
+			
+			div#calendar {
+				position: absolute;
+				width: 30%;
+				right: 0;
+				padding: 0 1em;
+				box-sizing: border-box;
+			}
+			
+			@media only screen and (max-width: 500px) {
+				
+				div#map {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					width: auto;
+					height: 40%;
+					z-index: 1;
+				}
+				
+				div#calendar {
+					position: relative;
+					width: auto;
+					top: 40%;
+					padding: 0 1em;
+				}
+			}
+			
+			div#calendar table {
+				border-collapse: collapse;
+				border-spacing: 0;
+			}
+			
+			div#calendar tr.disabled {
+				opacity: 0.15;
+			}
+			
+			div#calendar tr td.left {
+				text-align: right;
+				padding-right: 1em;
+			}
+			
+			div#calendar tr td.right {
+				cursor: hand;
+			}
+			
+			div#calendar tr td.line {
+				border-left-width: 1px;
+				border-left-color: black;
+				padding-right: 1em;
+			}
+			
+			div#calendar tr.event td.line {
+				height: 1px; /* hack to get the div the right size */
+			}
+			
+			div#calendar tr.event td.line div {
+				background-color: black;
+				margin-left: -5px;
+				width: 9px;
+				border-radius: 4.5px;
+				height: 100%;
+			}
+			
+			div#calendar tr td.line.driving {
+				border-left-style: dashed;
+			}
+			
+			div#calendar tr td.line.flying {
+				border-left-style: solid;
+			}
+			
+			div#calendar tr.event td {
+				vertical-align: top;
+			}
+			
+			div#calendar tr.event td.left,
+			div#calendar tr.event td.right {
+				padding-top: 0.5em;
+				padding-bottom: 0.5em;
+			}
+			
+			div#calendar tr.event td.left div.day {
+				width: 4em;
+				font-weight: 600;
+			}
+			
+			div#calendar tr.event td.left div.day div.dayTo {
+				font-weight: 100;
+				font-size: 0.8em;
+			}
+			
+			div#calendar tr.event td.right div.title {
+				margin-bottom: 0.1em;
+			}
+			
+			div#calendar tr.event td.right div.location {
+				font-size: 0.7em;
+			}
+			
+			div#calendar tr.travel td.left div,
+			div#calendar tr.travel td.right div {
+				color: #888;
+				font-size: 0.8em;
+			}
+			
+			div#calendar tr.travel.highlighted td.left div,
+			div#calendar tr.travel.highlighted td.right div {
+				color: black;
+			}
+			
+			div#map div.marker {
+				width: 10px;
+				height: 10px;
+				border-radius: 5px;
+				background-color: #990000;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="map"></div>
+		<div id="calendar">
+			<table>
+			</table>
+		</div>
+		
+		<script>
+			
+			if (-1 !== location.search.indexOf("wakanda")) {
+				$("body").addClass("wakanda");
+			}
+			
+			function addEventTableViewRow(day, title, location, index) {
+				const dayView = $("<div>", {"class": "day"});
+				dayView.html(day);
+				
+				const titleView = $("<div>", {"class": "title"});
+				titleView.text(title);
+				
+				const locationView = $("<div>", {"class": "location"});
+				locationView.text(location);
+				
+				addTableViewRow("event", [dayView], [titleView, locationView], undefined, undefined, index);
+			}
+			
+			function addTravelTableViewRow(daysInBetween, modeOfTransportation, index) {
+				const daysInBetweenSuffix = (daysInBetween === 1) ? 'day' : 'days';
+				
+				const daysInBetweenView = $("<div>", {
+					"class": "daysInBetween",
+					"id": "daysInBetween-" + index,
+				});
+				daysInBetweenView.text(daysInBetween + ' ' + daysInBetweenSuffix);
+				
+				const distanceView = $("<div>", {
+					"class": "distance",
+					"id": "distance-" + index
+				});
+				
+				const distancePerDayView = $("<div>", {
+					"class": "distancePerDay",
+					"id": "distancePerDay-" + index
+				});
+				
+				const rowHeight = Math.max(daysInBetween * 7, 75);
+				
+				addTableViewRow("travel", [daysInBetweenView], [distanceView, distancePerDayView], rowHeight, modeOfTransportation, index);
+			}
+			
+			function addTableViewRow(elementType, leftElement, rightElement, customRowHeight, modeOfTransportation, index) {
+				const tableRow = $("<tr>", {
+					"class": elementType,
+					"id": elementType + index,
+				});
+				$("#calendar > table").append(tableRow);
+				
+				const leftCell = $("<td>", {"class": "left"});
+				leftCell.append(leftElement);
+				tableRow.append(leftCell);
+				
+				const lineCell = $("<td>", {"class": "line"});
+				if (modeOfTransportation) {
+					lineCell.addClass(modeOfTransportation);
+				}
+				tableRow.append(lineCell);
+				
+				if (customRowHeight) {
+					lineCell.css('height', customRowHeight);
+				}
+				
+				if (elementType === "event") {
+					const lineEvent = $("<div>");
+					lineCell.append(lineEvent);
+				}
+				
+				const rightCell = $("<td>", {
+					"class": "right",
+					"onmouseover": elementType + "OnMouseOver(" + index + ")",
+					"onmouseout": "onHoverMouseOut()",
+				});
+				rightCell.append(rightElement);
+				tableRow.append(rightCell);
+			}
+			
+			
+			// sort the events
+			const sortedAllEvents = _.sortBy(events, (event) => {
+				return event.startDate;
+			});
+			
+			// remove any events in the past
+			const todayDate = new Date();
+			const todayDateMoment = moment(todayDate);
+			const sortedEvents = _.filter(sortedAllEvents, (event) => {
+				const eventMoment = moment(event.startDate);
+				return eventMoment.diff(todayDateMoment) > 0;
+			});
+			
+			
+			// add top row to add some spacing to the timeline
+			const topTableRow = $("<tr>");
+			$("#calendar > table").append(topTableRow);
+				
+			topTableRow.append($("<td>"));
+			topTableRow.append($("<td>", {"class": "line flying",}).css('height', '4em'));
+			
+			// add an event row for today
+			const formattedDay = $.datepicker.formatDate('M d', todayDate);
+			addEventTableViewRow(formattedDay, 'Today', undefined, -1);
+			
+			// add a travel row for today
+			const firstEventMoment = moment(sortedEvents[0].startDate);
+			const daysInBetween = firstEventMoment.diff(todayDateMoment, "days");
+			addTravelTableViewRow(daysInBetween+1, "flying", -1);
+			
+			// add calendar item for each event
+			_.each(sortedEvents, (event, index) => {
+				
+				// fancy format the date
+				const formattedStartDay = $.datepicker.formatDate('M d', event.startDate);
+				const formattedEndDay = $.datepicker.formatDate('M d', event.endDate);
+				
+				let day;
+				if (formattedStartDay === formattedEndDay) {
+					day = formattedStartDay;
+					
+				} else {
+					day = formattedStartDay + '<div class="dayTo">to</div>' + formattedEndDay;
+				}
+				
+				// add event row
+				addEventTableViewRow(day, event.title, event.location, index);
+				
+				// add travel row
+				const nextEvent = sortedEvents[index+1];
+				if (nextEvent) {
+					
+					const eventMoment = moment(event.endDate);
+					const nextEventMoment = moment(nextEvent.startDate);
+					const daysInBetween = nextEventMoment.diff(eventMoment, "days");
+					
+					const isFlying = _.get(event, 'flyIn', false) || _.get(nextEvent, 'flyOut', false);
+					const modeOfTransportation = isFlying ? "flying" : "driving";
+					
+					addTravelTableViewRow(daysInBetween, modeOfTransportation, index);
+				}
+			});
+			
+			// add bottom row to add some spacing to the timeline
+			const bottomTableRow = $("<tr>");
+			$("#calendar > table").append(bottomTableRow);
+				
+			bottomTableRow.append($("<td>"));
+			bottomTableRow.append($("<td>", {"class": "line flying"}).css('height', '4em'));
+			
+			// create the map
+			mapboxgl.accessToken = 'pk.eyJ1IjoibG9nYW5yb2NrbW9yZSIsImEiOiJjamR0N2Nmc2EwODlsMnhsMzhhZjdqc2hxIn0.2b8odx5yDsbWAgYpGjJysw';
+			const map = new mapboxgl.Map({
+			    container: 'map',
+			    style: 'mapbox://styles/mapbox/light-v9'
+			});
+				
+			let latLongs;
+			let allMarkersBounds;
+			
+			if (navigator.userAgent.indexOf("Coda") === -1) {
+				
+				// plot each location on the map
+				const locationRequests = _.map(sortedEvents, (event) => {
+					const searchTerm = encodeURIComponent(event.location + ', United States');
+					return $.ajax('https://api.mapbox.com/geocoding/v5/mapbox.places/' + searchTerm + '.json?access_token=' + mapboxgl.accessToken);
+				});
+				
+				$.when.apply(undefined, locationRequests).then(function() {
+					const responses = arguments;
+					
+					latLongs = _.map(sortedEvents, (event, index) => {
+						const location = event.location;
+						const searchResults = responses[index];
+						const bestSearchResult = searchResults[0].features[0];
+						return bestSearchResult.center;
+					});
+					
+					allMarkersBounds = new mapboxgl.LngLatBounds();
+					
+					_.each(latLongs, (latLong, index) => {
+						const lastLatLong = latLongs[index-1];
+							
+						// extend the bounds
+						allMarkersBounds.extend(latLong);
+						
+					    map.addLayer({
+					        "id": "location-" + index,
+					        "type": "symbol",
+					        "source": {
+					            "type": "geojson",
+					            "data": {
+					                "type": "FeatureCollection",
+					                "features": [{
+					                    "type": "Feature",
+					                    "geometry": {
+					                        "type": "Point",
+									        "coordinates": latLong,
+					                    }
+					                }]
+					            }
+					        },
+					        "layout": {
+					            "icon-image": "circle-15",
+					        }
+					    });
+					});
+					
+					// fit the map to these lat longs
+					map.fitBounds(allMarkersBounds, {
+						padding: 50,
+					});
+				
+					// add route lines
+					const routeRequests = _.compact(_.map(latLongs, (latLong, index) => {
+						const lastLatLong = latLongs[index-1];
+						
+						if (!lastLatLong) {
+							return null;
+						}
+						
+						return $.ajax('https://api.mapbox.com/directions/v5/mapbox/driving/' + lastLatLong[0] + ',' + lastLatLong[1] + ';' + latLong[0] + ',' + latLong[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken);
+					}));
+					
+					$.when.apply(undefined, routeRequests).then(function() {
+						const responses = arguments;
+					
+						_.each(responses, (response, index) => {
+							const adjustedIndex = (index + 1);
+							
+							// get the geometry
+							const route = response[0].routes[0];
+							let geometry;
+							let dashArray;
+							
+							// show this as a flying route
+							const event = sortedEvents[adjustedIndex-1];
+							const nextEvent = sortedEvents[adjustedIndex];
+							
+							if (_.get(event, 'flyIn', false) ||
+								_.get(nextEvent, 'flyOut', false)) {
+									
+								const coordinates = route.geometry.coordinates;
+								const firstCoordinate = _.first(coordinates);
+								const lastCoordinate = _.last(coordinates);
+									
+								// calculate the geometry points for the arc
+								const lineDistance = turf.distance(turf.point(firstCoordinate), turf.point(lastCoordinate), {units: 'kilometers'});
+								
+								const straightLineFeature = {
+							        "type": "Feature",
+							        "geometry": {
+							            "type": "LineString",
+							            "coordinates": [
+							                firstCoordinate,
+							                lastCoordinate
+							            ]
+							        }
+							    };
+								const arcPoints = [];
+								
+								for (var i = 0; i < lineDistance; i++) {
+									var segment = turf.along(straightLineFeature, i / 1000 * lineDistance, {units: 'kilometers'});
+									arcPoints.push(segment.geometry.coordinates);
+								}
+								
+								geometry = {
+									type: "LineString",
+									coordinates: arcPoints,
+								};
+								dashArray = [1, 0];
+								
+								// add distances to the timeline
+								const distanceKilometers = getDistanceFromLatLonInKm(firstCoordinate[0], firstCoordinate[1], lastCoordinate[0], lastCoordinate[1]);
+								const distanceMiles = distanceKilometers * 0.621371192;
+								const formattedDistance = distanceMiles.toFixed(0);
+								$("#distance-" + index).text('fly ' + formattedDistance + ' miles');
+							}
+							
+							// show this as a driving route
+							else {
+								geometry = route.geometry;
+								dashArray = [2, 4];
+								
+								// add distances to the timeline
+								const distanceMeters = route.distance;
+								const distanceMiles = distanceMeters * 0.000621371192;
+								const formattedDistance = distanceMiles.toFixed(0);
+								$("#distance-" + index).text('drive ' + formattedDistance + ' miles');
+								
+								let days = parseInt($("#daysInBetween-" + index).text());
+								if (days === 0) {
+									days = 1;
+								}
+								const milesPerDay = distanceMiles/days;
+								const formattedDistancePerDay = milesPerDay.toFixed(0);
+								$("#distancePerDay-" + index).text('average ' + formattedDistancePerDay + ' miles per day');
+							}
+							
+							// add layers to the map
+							map.addLayer({
+								id: "route-" + adjustedIndex,
+								type: "line",
+								source: {
+									type: "geojson",
+									data: {
+										type: "Feature",
+										geometry: geometry
+									},
+								},
+								"layout": {
+								    "line-join": "round",
+								    "line-cap": "round"
+								},
+								"paint": {
+								    "line-color": "#111111",
+								    "line-width": 2,
+								    "line-dasharray": dashArray
+								}
+						    });
+							
+							map.addLayer({
+								id: "route-green-" + adjustedIndex,
+								type: "line",
+								source: {
+									type: "geojson",
+									data: {
+										type: "Feature",
+										geometry: geometry
+									},
+								},
+								"layout": {
+								    "line-join": "round",
+								    "line-cap": "round",
+								    "visibility": "none"
+								},
+								"paint": {
+								    "line-color": "#2ECC40",
+								    "line-width": 2,
+								    "line-dasharray": dashArray
+								}
+						    });
+							
+							map.addLayer({
+								id: "route-red-" + adjustedIndex,
+								type: "line",
+								source: {
+									type: "geojson",
+									data: {
+										type: "Feature",
+										geometry: geometry
+									},
+								},
+								"layout": {
+								    "line-join": "round",
+								    "line-cap": "round",
+								    "visibility": "none"
+								},
+								"paint": {
+								    "line-color": "#FF4136",
+								    "line-width": 2,
+								    "line-dasharray": dashArray
+								}
+						    });
+						});
+					});
+				});
+				
+				
+				function eventOnMouseOver(index) {
+					if (-1 === index) {
+						return;
+					}
+					
+					// update styling of the list
+					$("div#calendar table tr").addClass("disabled");
+					$("div#calendar table tr#event" + index).removeClass("disabled").addClass("highlighted");
+					
+					// update visibility of map elements
+					for(let i = 0; i < sortedEvents.length; i++) {
+						if (i !== index) {
+							map.setLayoutProperty('location-' + i, 'visibility', 'none');
+						}
+						if (i > 0) {
+							map.setLayoutProperty('route-' + i, 'visibility', 'none');
+						}
+						if (i > 0 && i === index) {
+							map.setLayoutProperty('route-green-' + i, 'visibility', 'visible');
+						}
+						if (i > 0 && i === index+1) {
+							map.setLayoutProperty('route-red-' + i, 'visibility', 'visible');
+						}
+					}
+					
+					// update the bounds of the map
+					const bounds = new mapboxgl.LngLatBounds();
+					bounds.extend(latLongs[index]);
+					map.fitBounds(bounds, {
+						padding: 50,
+						maxZoom: 9
+					});
+				}
+				
+				function travelOnMouseOver(index) {
+					if (-1 === index) {
+						return;
+					}
+					
+					// update styling of the list
+					$("div#calendar table tr").addClass("disabled");
+					$("div#calendar table tr#travel" + index).removeClass("disabled").addClass("highlighted");
+					
+					// update visibility of map elements
+					for(let i = 0; i < sortedEvents.length; i++) {
+						if (i !== index && i !== index+1) {
+							map.setLayoutProperty('location-' + i, 'visibility', 'none');
+						}
+						if (i > 0 && i !== index+1) {
+							map.setLayoutProperty('route-' + i, 'visibility', 'none');
+						}
+					}
+					
+					// update the bounds of the map
+					const bounds = new mapboxgl.LngLatBounds();
+					bounds.extend(latLongs[index]);
+					bounds.extend(latLongs[index+1]);
+					map.fitBounds(bounds, {
+						padding: 50,
+						maxZoom: 7
+					});
+				}
+				
+				function onHoverMouseOut() {
+					// update styling of the list
+					$("div#calendar table tr").removeClass("disabled").removeClass("highlighted");
+					
+					// update visibility of map elements
+					for(let i = 0; i < sortedEvents.length; i++) {
+						map.setLayoutProperty('location-' + i, 'visibility', 'visible');
+						if (i > 0) {
+							map.setLayoutProperty('route-' + i, 'visibility', 'visible');
+							map.setLayoutProperty('route-green-' + i, 'visibility', 'none');
+							map.setLayoutProperty('route-red-' + i, 'visibility', 'none');
+						}
+					}
+					
+					// update the bounds of the map
+					map.fitBounds(allMarkersBounds, {
+						padding: 50,
+					});
+				}
+				
+				
+				// from https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+				function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+				  var R = 6371; // Radius of the earth in km
+				  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+				  var dLon = deg2rad(lon2-lon1); 
+				  var a = 
+				    Math.sin(dLat/2) * Math.sin(dLat/2) +
+				    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+				    Math.sin(dLon/2) * Math.sin(dLon/2)
+				    ; 
+				  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+				  var d = R * c; // Distance in km
+				  return d;
+				}
+				
+				function deg2rad(deg) {
+				  return deg * (Math.PI/180)
+				}
+			}
+			
+		</script>
+	</body>
+</html>
