@@ -36,7 +36,7 @@ for dateRange in dateRangesToInclude:
 		datesToInclude.append(datetime.date.strftime(dateToInclude, "%Y-%m-%d"))
 		
 # decimal places to round to
-roundAmount = 2
+roundAmount = 4
 	
 # create global lists
 waypoints = []
