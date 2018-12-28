@@ -10,6 +10,7 @@
 		
 		<script src="jquery.min.js"></script>
 		<script src='arcdata.js'></script>
+		<script src='polyline.js'></script>
 		
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
@@ -66,7 +67,7 @@
 							'data': {
 								'type': 'Feature',
 								'geometry': {
-									'coordinates': track.points,
+									'coordinates': polyline.decode(track.polyline),
 									'type': 'LineString'
 								}
 							},

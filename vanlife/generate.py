@@ -3,6 +3,7 @@
 import datetime
 import gpxpy
 import json
+import polyline
 import os
 
 dateRangesToInclude = [
@@ -82,7 +83,7 @@ for index, track in enumerate(tracks):
 		] for point in segment.points]
 			
 		tracksJSON.append({
-			'points': pointsArray,
+			'polyline': polyline.encode(pointsArray),
 			'lineColor':  lineColor,
 		})
 
