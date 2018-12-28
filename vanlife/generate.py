@@ -35,7 +35,7 @@ roundAmount = 2
 	
 # create global lists
 waypoints = []
-tracks = []
+tracksByType = {}
 
 # loop through all of the GPX files
 for gpxFile in gpxFiles:
@@ -51,7 +51,13 @@ for gpxFile in gpxFiles:
 	
 	# add to the global list
 	waypoints.extend(gpx.waypoints)
-	tracks.extend(gpx.tracks)
+	
+	for track in gpx.tracks:
+		
+		if not track.type in tracksByType:
+			tracksByType[track.type] = []
+			
+		tracksByType[track.type].append(track)
 	
 # make a list of all mapbox layers for waypoints
 waypointsJSON = [{
@@ -64,35 +70,41 @@ waypointsJSON = [{
 } for i,x in enumerate(waypoints)]
 
 # make a list of all mapbox layers for tracks
+trackPointsByType = {}
+for trackType, tracks in tracksByType.items():
+	trackPointsByType[trackType] = []
+	
+	for index, track in enumerate(tracks):
+		for segment in track.segments:
+		
+			# skip if there aren't any points
+			if not segment.points:
+				continue
+				
+			pointsArray = [[
+				round(point.longitude, roundAmount),
+				round(point.latitude, roundAmount)
+			] for point in segment.points]
+			
+			# remove duplicate adjoining points
+			pointsArray = [k for k, g in itertools.groupby(pointsArray)]
+			
+			trackPointsByType[trackType].extend(pointsArray)
+		
 tracksJSON = []
-for index, track in enumerate(tracks):
+for trackType, trackPoints in trackPointsByType.items():
 
-	# determine the line color
 	lineColor = {
 		'airplane': '#0000FF',
 		'car': '#FF0000',
 		'walking': '#00FF00',
-	}.get(track.type, '#000000')
-	
-	# print the object
-	for segment in track.segments:
-	
-		# skip if there aren't any points
-		if not segment.points:
-			continue
-			
-		pointsArray = [[
-			round(point.longitude, roundAmount),
-			round(point.latitude, roundAmount)
-		] for point in segment.points]
-		
-		# remove duplicate adjoining points
-		pointsArray = [k for k, g in itertools.groupby(pointsArray)]
-		
-		tracksJSON.append({
-			'polyline': polyline.encode(pointsArray),
-			'lineColor':  lineColor,
-		})
+	}.get(trackType, '#000000')
+
+	tracksJSON.append({
+		'polyline': polyline.encode(trackPoints),
+		'lineColor':  lineColor,
+		'type': trackType,
+	})
 
 # print to the file
 javascriptOutputFile = open(javascriptOutputFilePath, 'w+')
