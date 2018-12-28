@@ -10,6 +10,9 @@ dateRangesToInclude = [
 	['2018-10-31', '2018-11-09'],
 	['2018-11-26', '2018-12-20'],
 ]
+dateRangesToInclude = [ # TEMP: do a small dataset
+	['2018-12-19', '2018-12-20'],
+]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/iCloud~com~bigpaua~LearnerCoacher/Documents/Export/GPX'
 javascriptOutputFilePath = 'arcdata.js'
@@ -51,13 +54,15 @@ for gpxFile in gpxFiles:
 # make a list of all mapbox layers for waypoints
 waypointsJSON = [{
 	'coord': [x.longitude, x.latitude],
+	'name': x.name,
+	'link': x.link,
 } for i,x in enumerate(waypoints)]
 
 # make a list of all mapbox layers for tracks
 tracksJSON = []
 for index, track in enumerate(tracks):
 
-	# determine the line colopr
+	# determine the line color
 	lineColor = {
 		'airplane': '#0000FF',
 		'car': '#FF0000',
