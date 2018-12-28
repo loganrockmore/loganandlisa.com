@@ -59,6 +59,8 @@
 				
 				// add all of the tracks
 				$.each(tracks, function(index, track){
+					const coordinates = polyline.decode(track.polyline);
+					
 					map.addLayer({
 						'id': 'route-' + index,
 						'type': 'line',
@@ -67,7 +69,7 @@
 							'data': {
 								'type': 'Feature',
 								'geometry': {
-									'coordinates': polyline.decode(track.polyline),
+									'coordinates': coordinates,
 									'type': 'LineString'
 								}
 							},
@@ -81,9 +83,14 @@
 						    'line-width': 2
 						}
 					});
+					
+					$.each(coordinates, function(index, coordinate) {
+						allLayerBounds.extend(coordinate);
+					});
 				});
 				
 				// add the waypoints
+				/*
 				$.each(waypoints, function(index, waypoint){
 					map.addLayer({
 					    'id': 'location-' + index,
@@ -108,6 +115,7 @@
 					
 					allLayerBounds.extend(waypoint.coord);
 				});
+				*/
 				
 				// fit the map to the waypoints
 				map.fitBounds(allLayerBounds, {
