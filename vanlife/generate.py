@@ -2,6 +2,7 @@
 
 import datetime
 import gpxpy
+import itertools
 import json
 import polyline
 import os
@@ -10,9 +11,6 @@ dateRangesToInclude = [
 	['2018-09-14', '2018-10-14'],
 	['2018-10-31', '2018-11-09'],
 	['2018-11-26', '2018-12-20'],
-]
-dateRangesToInclude = [ # TEMP: do a small dataset
-	['2018-12-19', '2018-12-20'],
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/iCloud~com~bigpaua~LearnerCoacher/Documents/Export/GPX'
@@ -31,6 +29,9 @@ for dateRange in dateRangesToInclude:
 	for i in range(delta.days + 1):
 		dateToInclude = startDate + datetime.timedelta(i)
 		datesToInclude.append(datetime.date.strftime(dateToInclude, "%Y-%m-%d"))
+		
+# decimal places to round to
+roundAmount = 2
 	
 # create global lists
 waypoints = []
@@ -54,7 +55,10 @@ for gpxFile in gpxFiles:
 	
 # make a list of all mapbox layers for waypoints
 waypointsJSON = [{
-	'coord': [x.longitude, x.latitude],
+	'coord': [
+		round(x.longitude, roundAmount),
+		round(x.latitude, roundAmount)
+	],
 	'name': x.name,
 	'link': x.link,
 } for i,x in enumerate(waypoints)]
@@ -78,10 +82,13 @@ for index, track in enumerate(tracks):
 			continue
 			
 		pointsArray = [[
-			point.longitude,
-			point.latitude
+			round(point.longitude, roundAmount),
+			round(point.latitude, roundAmount)
 		] for point in segment.points]
-			
+		
+		# remove duplicate adjoining points
+		pointsArray = [k for k, g in itertools.groupby(pointsArray)]
+		
 		tracksJSON.append({
 			'polyline': polyline.encode(pointsArray),
 			'lineColor':  lineColor,
