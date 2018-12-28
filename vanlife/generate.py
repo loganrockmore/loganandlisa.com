@@ -8,9 +8,14 @@ import polyline
 import os
 
 dateRangesToInclude = [
-	['2018-09-14', '2018-10-14'],
+	['2018-07-29', '2018-08-19'],
+	# burning man
+	['2018-09-03', '2018-10-14'],
+	# seattle wedding
 	['2018-10-31', '2018-11-09'],
+	# la crosse wedding
 	['2018-11-26', '2018-12-20'],
+	# christmas and la crosse trip
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/iCloud~com~bigpaua~LearnerCoacher/Documents/Export/GPX'
