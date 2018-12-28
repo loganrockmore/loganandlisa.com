@@ -50,24 +50,7 @@ for gpxFile in gpxFiles:
 	
 # make a list of all mapbox layers for waypoints
 waypointsJSON = [{
-    'id': 'location-' + str(i),
-    'type': 'symbol',
-    'source': {
-        'type': 'geojson',
-        'data': {
-            'type': 'FeatureCollection',
-            'features': [{
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-			        'coordinates': [x.longitude, x.latitude],
-                }
-            }]
-        }
-    },
-    'layout': {
-        'icon-image': 'circle-15',
-    }
+	'coord': [x.longitude, x.latitude],
 } for i,x in enumerate(waypoints)]
 
 # make a list of all mapbox layers for tracks

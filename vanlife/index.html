@@ -63,10 +63,28 @@
 				
 				// add the waypoints
 				$.each(waypoints, function(index, waypoint){
-					map.addLayer(waypoint);
+					map.addLayer({
+					    'id': 'location-' + index,
+					    'type': 'symbol',
+					    'source': {
+					        'type': 'geojson',
+					        'data': {
+					            'type': 'FeatureCollection',
+					            'features': [{
+					                'type': 'Feature',
+					                'geometry': {
+					                    'type': 'Point',
+								        'coordinates': waypoint.coord,
+					                }
+					            }]
+					        }
+					    },
+					    'layout': {
+					        'icon-image': 'circle-15',
+					    }
+					});
 					
-					const coordinates = waypoint.source.data.features[0].geometry.coordinates;
-					allLayerBounds.extend(coordinates);
+					allLayerBounds.extend(waypoint.coord);
 				});
 				
 				// fit the map to the waypoints
