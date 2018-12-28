@@ -76,32 +76,14 @@ for index, track in enumerate(tracks):
 		if not segment.points:
 			continue
 			
-		pointsJSON = [[
+		pointsArray = [[
 			point.longitude,
 			point.latitude
 		] for point in segment.points]
 			
 		tracksJSON.append({
-			'id': 'route-' + str(index),
-			'type': 'line',
-			'source': {
-				'type': 'geojson',
-				'data': {
-					'type': 'Feature',
-					'geometry': {
-						'coordinates': pointsJSON,
-						'type': 'LineString'
-					}
-				},
-			},
-			'layout': {
-			    'line-join': 'round',
-			    'line-cap': 'round'
-			},
-			'paint': {
-			    'line-color': lineColor,
-			    'line-width': 2
-			}
+			'points': pointsArray,
+			'lineColor':  lineColor,
 		})
 
 # print to the file

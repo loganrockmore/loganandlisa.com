@@ -58,7 +58,28 @@
 				
 				// add all of the tracks
 				$.each(tracks, function(index, track){
-					map.addLayer(track);
+					map.addLayer({
+						'id': 'route-' + index,
+						'type': 'line',
+						'source': {
+							'type': 'geojson',
+							'data': {
+								'type': 'Feature',
+								'geometry': {
+									'coordinates': track.points,
+									'type': 'LineString'
+								}
+							},
+						},
+						'layout': {
+						    'line-join': 'round',
+						    'line-cap': 'round'
+						},
+						'paint': {
+						    'line-color': track.lineColor,
+						    'line-width': 2
+						}
+					});
 				});
 				
 				// add the waypoints
