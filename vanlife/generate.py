@@ -70,9 +70,9 @@ waypointsJSON = [{
 } for i,x in enumerate(waypoints)]
 
 # make a list of all mapbox layers for tracks
-trackPointsByType = {}
+tracksJSON = []
 for trackType, tracks in tracksByType.items():
-	trackPointsByType[trackType] = []
+	trackTypeArray = []
 	
 	for index, track in enumerate(tracks):
 		for segment in track.segments:
@@ -88,24 +88,24 @@ for trackType, tracks in tracksByType.items():
 			
 			# remove duplicate adjoining points
 			pointsArray = [k for k, g in itertools.groupby(pointsArray)]
+			encodedPolyline = polyline.encode(pointsArray)
 			
-			trackPointsByType[trackType].extend(pointsArray)
-		
-tracksJSON = []
-for trackType, trackPoints in trackPointsByType.items():
+			trackTypeArray.append(encodedPolyline)
 
+	# figure out the line color
 	lineColor = {
 		'airplane': '#0000FF',
 		'car': '#FF0000',
 		'walking': '#00FF00',
 	}.get(trackType, '#000000')
-
+			
+	# append to the larger structure
 	tracksJSON.append({
-		'polyline': polyline.encode(trackPoints),
-		'lineColor':  lineColor,
 		'type': trackType,
+		'lineColor':  lineColor,
+		'segments': trackTypeArray,
 	})
-
+		
 # print to the file
 javascriptOutputFile = open(javascriptOutputFilePath, 'w+')
 

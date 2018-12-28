@@ -59,7 +59,24 @@
 				
 				// add all of the tracks
 				$.each(tracks, function(index, track){
-					const coordinates = polyline.decode(track.polyline);
+					const segments = track.segments;
+					const featuresArray = [];
+					
+					$.each(segments, function(index, segment) {
+						const coordinates = polyline.decode(segment);
+						
+						featuresArray.push({
+							'type': 'Feature',
+							'geometry': {
+								'coordinates': coordinates,
+								'type': 'LineString'
+							}
+						});
+						
+						$.each(coordinates, function(index, coordinate) {
+							allLayerBounds.extend(coordinate);
+						});
+					});
 					
 					map.addLayer({
 						'id': 'route-' + index,
@@ -67,11 +84,8 @@
 						'source': {
 							'type': 'geojson',
 							'data': {
-								'type': 'Feature',
-								'geometry': {
-									'coordinates': coordinates,
-									'type': 'LineString'
-								}
+								'type': 'FeatureCollection',
+								'features': featuresArray,
 							},
 						},
 						'layout': {
@@ -82,10 +96,6 @@
 						    'line-color': track.lineColor,
 						    'line-width': 2
 						}
-					});
-					
-					$.each(coordinates, function(index, coordinate) {
-						allLayerBounds.extend(coordinate);
 					});
 				});
 				
