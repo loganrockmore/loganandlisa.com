@@ -102,7 +102,7 @@ for trackType, tracks in tracksByType.items():
 		'airplane': '#0000FF',
 		'car': '#FF0000',
 		'walking': '#00FF00',
-	}.get(trackType, '#000000')
+	}.get(trackType, '#FF0000') # TEMP: make unknown segments red
 			
 	# append to the larger structure
 	tracksJSON.append({
