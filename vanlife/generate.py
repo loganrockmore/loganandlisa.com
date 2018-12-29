@@ -13,6 +13,8 @@ dateRangesToInclude = [
 	['2018-09-03', '2018-10-14'],
 	# seattle wedding
 	['2018-10-31', '2018-11-09'],
+	# orlando trip
+	['2018-11-18', '2018-11-18'],
 	# la crosse wedding
 	['2018-11-26', '2018-12-20'],
 	# christmas and la crosse trip
@@ -61,6 +63,22 @@ for gpxFile in gpxFiles:
 		
 		if not track.type in tracksByType:
 			tracksByType[track.type] = []
+			
+		# skip certain tracks in certain days
+		firstSegmentPoints = track.segments[0].points
+		if 0 < len(firstSegmentPoints):
+		
+			# this is the very first day of #vanlife. skip everything until we start driving
+			if gpxFileDatePrefix == '2018-07-29':
+				afterDate = '2018-07-29T15:01:31'
+				if firstSegmentPoints[0].time < datetime.datetime.strptime(afterDate, '%Y-%m-%dT%H:%M:%S'):
+					continue
+		
+			# this is the last day of the Orlando trip. skip everything until we start driving
+			if gpxFileDatePrefix == '2018-11-18':
+				afterDate = '2018-11-18T17:01:55'
+				if firstSegmentPoints[0].time < datetime.datetime.strptime(afterDate, '%Y-%m-%dT%H:%M:%S'):
+					continue
 			
 		tracksByType[track.type].append(track)
 	
