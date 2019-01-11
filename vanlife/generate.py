@@ -8,16 +8,22 @@ import polyline
 import os
 
 dateRangesToInclude = [
-	['2018-07-29T15:01:31', '2018-08-20T00:00:00'],
+	['2018-07-29T15:23', '2018-08-20T00:00'],
 	# burning man
-	['2018-09-03T00:00:00', '2018-10-15T00:00:00'],
+	['2018-09-08T00:00', '2018-09-10T16:45'],
+	# seattle visit
+	['2018-09-14T00:00', '2018-10-10T22:02'],
+	# seattle visit
+	['2018-10-12T11:49', '2018-10-14T15:43'],
 	# seattle wedding
-	['2018-10-31T00:00:00', '2018-11-10T00:00:00'],
+	['2018-10-31T12:30', '2018-11-09T18:40'],
 	# orlando trip
-	['2018-11-18T17:01:55', '2018-11-19T00:00:00'],
+	['2018-11-18T14:49', '2018-11-18T20:59'],
 	# la crosse wedding
-	['2018-11-26T00:00:00', '2018-12-21T00:00:00'],
-	# christmas in bay area, la crosse trip, sketchfest in san francisco
+	['2018-11-26T12:20', '2018-11-26T17:03'],
+	# minneapolis/st. paul airbnb
+	['2018-11-28T00:00', '2018-12-19T17:52'],
+	# christmas on kings mountain, la crosse trip, sketchfest in san francisco
 ]
 
 gpxFolder = '/Users/logan/Downloads/Arc Monthly Export'
@@ -29,8 +35,8 @@ gpxFiles.sort()
 # create the date time ranges
 dateTimeRanges = []
 for dateRange in dateRangesToInclude:
-	startDate = datetime.datetime.strptime(dateRange[0], "%Y-%m-%dT%H:%M:%S")
-	endDate = datetime.datetime.strptime(dateRange[1], "%Y-%m-%dT%H:%M:%S")
+	startDate = datetime.datetime.strptime(dateRange[0], "%Y-%m-%dT%H:%M")
+	endDate = datetime.datetime.strptime(dateRange[1], "%Y-%m-%dT%H:%M")
 	dateTimeRanges.append([startDate, endDate])
 	
 def dateTimeIsInRange(dateTime, dateTimeRanges):
