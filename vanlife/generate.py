@@ -8,16 +8,16 @@ import polyline
 import os
 
 dateRangesToInclude = [
-	['2018-07-29', '2018-08-19'],
+	['2018-07-29T15:01:31', '2018-08-20T00:00:00'],
 	# burning man
-	['2018-09-03', '2018-10-14'],
+	['2018-09-03T00:00:00', '2018-10-15T00:00:00'],
 	# seattle wedding
-	['2018-10-31', '2018-11-09'],
+	['2018-10-31T00:00:00', '2018-11-10T00:00:00'],
 	# orlando trip
-	['2018-11-18', '2018-11-18'],
+	['2018-11-18T17:01:55', '2018-11-19T00:00:00'],
 	# la crosse wedding
-	['2018-11-26', '2018-12-20'],
-	# christmas and la crosse trip
+	['2018-11-26T00:00:00', '2018-12-21T00:00:00'],
+	# christmas in bay area, la crosse trip, sketchfest in san francisco
 ]
 
 gpxFolder = '/Users/logan/Downloads/Arc Monthly Export'
@@ -26,17 +26,19 @@ javascriptOutputFilePath = 'arcdata.js'
 gpxFiles = os.listdir(gpxFolder)
 gpxFiles.sort()
 
-# create the list of specific dates to exclude
-datesToInclude = []
+# create the date time ranges
+dateTimeRanges = []
 for dateRange in dateRangesToInclude:
-	startDate = datetime.datetime.strptime(dateRange[0], "%Y-%m-%d").date()
-	endDate = datetime.datetime.strptime(dateRange[1], "%Y-%m-%d").date()
+	startDate = datetime.datetime.strptime(dateRange[0], "%Y-%m-%dT%H:%M:%S")
+	endDate = datetime.datetime.strptime(dateRange[1], "%Y-%m-%dT%H:%M:%S")
+	dateTimeRanges.append([startDate, endDate])
 	
-	delta = endDate - startDate
-	for i in range(delta.days + 1):
-		dateToInclude = startDate + datetime.timedelta(i)
-		datesToInclude.append(dateToInclude)
-		
+def dateTimeIsInRange(dateTime, dateTimeRanges):
+	for range in dateTimeRanges:
+		if dateTime >= range[0] and dateTime <= range[1]:
+			return True
+	return False
+	
 # decimal places to round to
 roundAmount = 4
 	
@@ -54,8 +56,8 @@ for gpxFile in gpxFiles:
 	# add to the global list
 	for waypoint in gpx.waypoints:
 	
-		# skip waypoints not in the dates to include
-		if waypoint.time.date() not in datesToInclude:
+		# skip if out of range
+		if not dateTimeIsInRange(waypoint.time, dateTimeRanges):
 			continue
 			
 		# add to the data structure
@@ -63,28 +65,15 @@ for gpxFile in gpxFiles:
 	
 	for track in gpx.tracks:
 		
-		# skip certain tracks in certain days
 		firstSegmentPoints = track.segments[0].points
 		if 0 < len(firstSegmentPoints):
 		
 			firstPoint = firstSegmentPoints[0]
-			firstPointDate = firstPoint.time.date()
+			firstPointDateTime = firstPoint.time
 		
-			# skip tracks not in the dates to include
-			if firstPointDate not in datesToInclude:
+			# skip if out of range
+			if not dateTimeIsInRange(firstPointDateTime, dateTimeRanges):
 				continue
-				
-			# this is the very first day of #vanlife. skip everything until we start driving
-			if firstPointDate == datetime.datetime.strptime('2018-07-29', '%Y-%m-%d').date():
-				afterDate = '2018-07-29T15:01:31'
-				if firstPoint.time < datetime.datetime.strptime(afterDate, '%Y-%m-%dT%H:%M:%S'):
-					continue
-		
-			# this is the last day of the Orlando trip. skip everything until we start driving
-			if firstPointDate == datetime.datetime.strptime('2018-11-18', '%Y-%m-%d').date():
-				afterDate = '2018-11-18T17:01:55'
-				if firstPoint.time < datetime.datetime.strptime(afterDate, '%Y-%m-%dT%H:%M:%S'):
-					continue
 		else:
 			# there are no segments, so it's not worth including
 			continue
