@@ -20,7 +20,7 @@ dateRangesToInclude = [
 	# christmas and la crosse trip
 ]
 
-gpxFolder = '/Users/logan/Library/Mobile Documents/iCloud~com~bigpaua~LearnerCoacher/Documents/Export/GPX'
+gpxFolder = '/Users/logan/Downloads/Arc Monthly Export'
 javascriptOutputFilePath = 'arcdata.js'
 
 gpxFiles = os.listdir(gpxFolder)
@@ -35,7 +35,7 @@ for dateRange in dateRangesToInclude:
 	delta = endDate - startDate
 	for i in range(delta.days + 1):
 		dateToInclude = startDate + datetime.timedelta(i)
-		datesToInclude.append(datetime.date.strftime(dateToInclude, "%Y-%m-%d"))
+		datesToInclude.append(dateToInclude)
 		
 # decimal places to round to
 roundAmount = 4
@@ -46,39 +46,52 @@ tracksByType = {}
 
 # loop through all of the GPX files
 for gpxFile in gpxFiles:
-	
-	# skip this file, if specified
-	gpxFileDatePrefix = gpxFile[:10]
-	if gpxFileDatePrefix not in datesToInclude:
-		continue
-		
+
 	# parse the file
 	gpxFileContents = open(gpxFolder + '/' + gpxFile, 'r')
 	gpx = gpxpy.parse(gpxFileContents)
 	
 	# add to the global list
-	waypoints.extend(gpx.waypoints)
+	for waypoint in gpx.waypoints:
+	
+		# skip waypoints not in the dates to include
+		if waypoint.time.date() not in datesToInclude:
+			continue
+			
+		# add to the data structure
+		waypoints.append(waypoint)
 	
 	for track in gpx.tracks:
 		
-		if not track.type in tracksByType:
-			tracksByType[track.type] = []
-			
 		# skip certain tracks in certain days
 		firstSegmentPoints = track.segments[0].points
 		if 0 < len(firstSegmentPoints):
 		
+			firstPoint = firstSegmentPoints[0]
+			firstPointDate = firstPoint.time.date()
+		
+			# skip tracks not in the dates to include
+			if firstPointDate not in datesToInclude:
+				continue
+				
 			# this is the very first day of #vanlife. skip everything until we start driving
-			if gpxFileDatePrefix == '2018-07-29':
+			if firstPointDate == datetime.datetime.strptime('2018-07-29', '%Y-%m-%d').date():
 				afterDate = '2018-07-29T15:01:31'
-				if firstSegmentPoints[0].time < datetime.datetime.strptime(afterDate, '%Y-%m-%dT%H:%M:%S'):
+				if firstPoint.time < datetime.datetime.strptime(afterDate, '%Y-%m-%dT%H:%M:%S'):
 					continue
 		
 			# this is the last day of the Orlando trip. skip everything until we start driving
-			if gpxFileDatePrefix == '2018-11-18':
+			if firstPointDate == datetime.datetime.strptime('2018-11-18', '%Y-%m-%d').date():
 				afterDate = '2018-11-18T17:01:55'
-				if firstSegmentPoints[0].time < datetime.datetime.strptime(afterDate, '%Y-%m-%dT%H:%M:%S'):
+				if firstPoint.time < datetime.datetime.strptime(afterDate, '%Y-%m-%dT%H:%M:%S'):
 					continue
+		else:
+			# there are no segments, so it's not worth including
+			continue
+		
+		# add to the data structure
+		if not track.type in tracksByType:
+			tracksByType[track.type] = []
 			
 		tracksByType[track.type].append(track)
 	
