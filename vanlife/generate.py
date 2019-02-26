@@ -26,7 +26,7 @@ dateRangesToInclude = [
 	# christmas on kings mountain, la crosse trip, sketchfest in san francisco
 	['2019-02-02T12:00', '2019-02-02T19:45'],
 	# santa rosa, pliny the younger
-	['2019-02-04T01:00', '2019-02-26T12:00'],
+	['2019-02-04T01:00'],
 ]
 
 gpxFolder = '/Users/logan/Downloads/Arc Monthly Export'
@@ -39,7 +39,12 @@ gpxFiles.sort()
 dateTimeRanges = []
 for dateRange in dateRangesToInclude:
 	startDate = datetime.datetime.strptime(dateRange[0], "%Y-%m-%dT%H:%M")
-	endDate = datetime.datetime.strptime(dateRange[1], "%Y-%m-%dT%H:%M")
+	
+	if len(dateRange) ==  2:
+		endDate = datetime.datetime.strptime(dateRange[1], "%Y-%m-%dT%H:%M")
+	else:
+		endDate = datetime.datetime.now()
+		
 	dateTimeRanges.append([startDate, endDate])
 	
 def dateTimeIsInRange(dateTime, dateTimeRanges):
