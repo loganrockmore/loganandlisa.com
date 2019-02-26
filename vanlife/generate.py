@@ -24,6 +24,9 @@ dateRangesToInclude = [
 	# minneapolis/st. paul airbnb
 	['2018-11-28T00:00', '2018-12-19T17:52'],
 	# christmas on kings mountain, la crosse trip, sketchfest in san francisco
+	['2019-02-02T12:00', '2019-02-02T19:45'],
+	# santa rosa, pliny the younger
+	['2019-02-04T01:00', '2019-02-26T12:00'],
 ]
 
 gpxFolder = '/Users/logan/Downloads/Arc Monthly Export'
