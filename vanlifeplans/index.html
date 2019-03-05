@@ -400,7 +400,7 @@
 					const nextEventMoment = moment(nextEvent.startDate);
 					const daysInBetween = nextEventMoment.diff(eventMoment, "days");
 					
-					const isFlying = _.get(event, 'flyIn', false) || _.get(nextEvent, 'flyOut', false);
+					const isFlying = _.get(nextEvent, 'flyIn', false) || _.get(event, 'flyOut', false);
 					const modeOfTransportation = isFlying ? "flying" : "driving";
 					
 					addTravelTableViewRow(daysInBetween, modeOfTransportation, index);
