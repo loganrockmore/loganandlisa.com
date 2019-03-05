@@ -503,8 +503,8 @@
 							const event = sortedEvents[adjustedIndex-1];
 							const nextEvent = sortedEvents[adjustedIndex];
 							
-							if (_.get(event, 'flyIn', false) ||
-								_.get(nextEvent, 'flyOut', false)) {
+							if (_.get(nextEvent, 'flyIn', false) ||
+								_.get(event, 'flyOut', false)) {
 									
 								const coordinates = route.geometry.coordinates;
 								const firstCoordinate = _.first(coordinates);
