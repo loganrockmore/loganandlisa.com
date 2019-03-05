@@ -480,159 +480,175 @@
 					map.fitBounds(allMarkersBounds, {
 						padding: 50,
 					});
+					
+					// function for adding driving layers
+					function addLayersToMap(index, geometry, dashArray) {
+					
+						map.addLayer({
+							id: "route-" + (index+1),
+							type: "line",
+							source: {
+								type: "geojson",
+								data: {
+									type: "Feature",
+									geometry: geometry
+								},
+							},
+							"layout": {
+							    "line-join": "round",
+							    "line-cap": "round"
+							},
+							"paint": {
+							    "line-color": "#111111",
+							    "line-width": 2,
+							    "line-dasharray": dashArray
+							}
+					    });
+						
+						map.addLayer({
+							id: "route-green-" + (index+1),
+							type: "line",
+							source: {
+								type: "geojson",
+								data: {
+									type: "Feature",
+									geometry: geometry
+								},
+							},
+							"layout": {
+							    "line-join": "round",
+							    "line-cap": "round",
+							    "visibility": "none"
+							},
+							"paint": {
+							    "line-color": "#2ECC40",
+							    "line-width": 2,
+							    "line-dasharray": dashArray
+							}
+					    });
+						
+						map.addLayer({
+							id: "route-red-" + (index+1),
+							type: "line",
+							source: {
+								type: "geojson",
+								data: {
+									type: "Feature",
+									geometry: geometry
+								},
+							},
+							"layout": {
+							    "line-join": "round",
+							    "line-cap": "round",
+							    "visibility": "none"
+							},
+							"paint": {
+							    "line-color": "#FF4136",
+							    "line-width": 2,
+							    "line-dasharray": dashArray
+							}
+					    });
+					}
 				
-					// add route lines
-					const routeRequests = _.compact(_.map(latLongs, (latLong, index) => {
+					// add driving route lines
+					const drivingRouteRequests = {};
+					const flyingRouteIndexes = {};
+					_.each(latLongs, (latLong, index) => {
 						const lastLatLong = latLongs[index-1];
 						
 						if (!lastLatLong) {
 							return null;
 						}
 						
-						return $.ajax('https://api.mapbox.com/directions/v5/mapbox/driving/' + lastLatLong[0] + ',' + lastLatLong[1] + ';' + latLong[0] + ',' + latLong[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken);
-					}));
+						// this is a flying route
+						const event = sortedEvents[index-1];
+						const nextEvent = sortedEvents[index];
+						const isFlyingRoute = _.get(nextEvent, 'flyIn', false) || _.get(event, 'flyOut', false);
+						
+						if (isFlyingRoute) {
+							flyingRouteIndexes[index] = [[lastLatLong[0], lastLatLong[1]], [latLong[0], latLong[1]]];
+						} else {
+							drivingRouteRequests[index] = $.ajax('https://api.mapbox.com/directions/v5/mapbox/driving/' + lastLatLong[0] + ',' + lastLatLong[1] + ';' + latLong[0] + ',' + latLong[1] + '?geometries=geojson&access_token=' + mapboxgl.accessToken);
+						}
+					});
 					
-					$.when.apply(undefined, routeRequests).then(function() {
+					const ajaxRequests = $.map(drivingRouteRequests, function(value, key) { return value; });
+					
+					$.when.apply(undefined, ajaxRequests).then(function() {
 						const responses = arguments;
-					
-						_.each(responses, (response, index) => {
-							const adjustedIndex = (index + 1);
+						
+						_.each(responses, (response, responseIndex) => {
+							
+							const request = response[2];
+							let index;
+							_.each(drivingRouteRequests, (thisRequest, thisIndex) => {
+								if (request == thisRequest) {
+									index = thisIndex-1;
+								}
+							});
 							
 							// get the geometry
 							const route = response[0].routes[0];
-							let geometry;
-							let dashArray;
+							const geometry = route.geometry;
+							const dashArray = [2, 4];
 							
-							// show this as a flying route
-							const event = sortedEvents[adjustedIndex-1];
-							const nextEvent = sortedEvents[adjustedIndex];
+							// add distances to the timeline
+							const distanceMeters = route.distance;
+							const distanceMiles = distanceMeters * 0.000621371192;
+							const formattedDistance = distanceMiles.toFixed(0);
+							$("#distance-" + index).text('drive ' + formattedDistance + ' miles');
 							
-							if (_.get(nextEvent, 'flyIn', false) ||
-								_.get(event, 'flyOut', false)) {
-									
-								const coordinates = route.geometry.coordinates;
-								const firstCoordinate = _.first(coordinates);
-								const lastCoordinate = _.last(coordinates);
-									
-								// calculate the geometry points for the arc
-								const lineDistance = turf.distance(turf.point(firstCoordinate), turf.point(lastCoordinate), {units: 'kilometers'});
-								
-								const straightLineFeature = {
-							        "type": "Feature",
-							        "geometry": {
-							            "type": "LineString",
-							            "coordinates": [
-							                firstCoordinate,
-							                lastCoordinate
-							            ]
-							        }
-							    };
-								const arcPoints = [];
-								
-								for (var i = 0; i < lineDistance; i++) {
-									var segment = turf.along(straightLineFeature, i / 1000 * lineDistance, {units: 'kilometers'});
-									arcPoints.push(segment.geometry.coordinates);
-								}
-								
-								geometry = {
-									type: "LineString",
-									coordinates: arcPoints,
-								};
-								dashArray = [1, 0];
-								
-								// add distances to the timeline
-								const distanceKilometers = getDistanceFromLatLonInKm(firstCoordinate[0], firstCoordinate[1], lastCoordinate[0], lastCoordinate[1]);
-								const distanceMiles = distanceKilometers * 0.621371192;
-								const formattedDistance = distanceMiles.toFixed(0);
-								$("#distance-" + index).text('fly ' + formattedDistance + ' miles');
+							let days = parseInt($("#daysInBetween-" + index).text());
+							if (days === 0) {
+								days = 1;
 							}
+							const milesPerDay = distanceMiles/days;
+							const formattedDistancePerDay = milesPerDay.toFixed(0);
+							$("#distancePerDay-" + index).text('average ' + formattedDistancePerDay + ' miles per day');
 							
-							// show this as a driving route
-							else {
-								geometry = route.geometry;
-								dashArray = [2, 4];
-								
-								// add distances to the timeline
-								const distanceMeters = route.distance;
-								const distanceMiles = distanceMeters * 0.000621371192;
-								const formattedDistance = distanceMiles.toFixed(0);
-								$("#distance-" + index).text('drive ' + formattedDistance + ' miles');
-								
-								let days = parseInt($("#daysInBetween-" + index).text());
-								if (days === 0) {
-									days = 1;
-								}
-								const milesPerDay = distanceMiles/days;
-								const formattedDistancePerDay = milesPerDay.toFixed(0);
-								$("#distancePerDay-" + index).text('average ' + formattedDistancePerDay + ' miles per day');
-							}
-							
-							// add layers to the map
-							map.addLayer({
-								id: "route-" + adjustedIndex,
-								type: "line",
-								source: {
-									type: "geojson",
-									data: {
-										type: "Feature",
-										geometry: geometry
-									},
-								},
-								"layout": {
-								    "line-join": "round",
-								    "line-cap": "round"
-								},
-								"paint": {
-								    "line-color": "#111111",
-								    "line-width": 2,
-								    "line-dasharray": dashArray
-								}
-						    });
-							
-							map.addLayer({
-								id: "route-green-" + adjustedIndex,
-								type: "line",
-								source: {
-									type: "geojson",
-									data: {
-										type: "Feature",
-										geometry: geometry
-									},
-								},
-								"layout": {
-								    "line-join": "round",
-								    "line-cap": "round",
-								    "visibility": "none"
-								},
-								"paint": {
-								    "line-color": "#2ECC40",
-								    "line-width": 2,
-								    "line-dasharray": dashArray
-								}
-						    });
-							
-							map.addLayer({
-								id: "route-red-" + adjustedIndex,
-								type: "line",
-								source: {
-									type: "geojson",
-									data: {
-										type: "Feature",
-										geometry: geometry
-									},
-								},
-								"layout": {
-								    "line-join": "round",
-								    "line-cap": "round",
-								    "visibility": "none"
-								},
-								"paint": {
-								    "line-color": "#FF4136",
-								    "line-width": 2,
-								    "line-dasharray": dashArray
-								}
-						    });
+							addLayersToMap(index, geometry, dashArray);
 						});
+					});
+				
+					// add flying routes
+					_.each(flyingRouteIndexes, (coordinates, index) => {
+						
+						const firstCoordinate = _.first(coordinates);
+						const lastCoordinate = _.last(coordinates);
+						
+						// calculate the geometry points for the arc
+						const lineDistance = turf.distance(turf.point(firstCoordinate), turf.point(lastCoordinate), {units: 'kilometers'});
+						
+						const straightLineFeature = {
+					        "type": "Feature",
+					        "geometry": {
+					            "type": "LineString",
+					            "coordinates": [
+					                firstCoordinate,
+					                lastCoordinate
+					            ]
+					        }
+					    };
+						const arcPoints = [];
+						
+						for (var i = 0; i < lineDistance; i++) {
+							var segment = turf.along(straightLineFeature, i / 1000 * lineDistance, {units: 'kilometers'});
+							arcPoints.push(segment.geometry.coordinates);
+						}
+						
+						geometry = {
+							type: "LineString",
+							coordinates: arcPoints,
+						};
+						dashArray = [1, 0];
+						
+						addLayersToMap(index-1, geometry, dashArray);
+						
+						// add distances to the timeline
+						const distanceKilometers = getDistanceFromLatLonInKm(firstCoordinate[0], firstCoordinate[1], lastCoordinate[0], lastCoordinate[1]);
+						const distanceMiles = distanceKilometers * 0.621371192;
+						const formattedDistance = distanceMiles.toFixed(0);
+						$("#distance-" + (index-1)).text('fly ' + formattedDistance + ' miles');
 					});
 				});
 				
