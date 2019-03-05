@@ -26,7 +26,8 @@ dateRangesToInclude = [
 	# christmas on kings mountain, la crosse trip, sketchfest in san francisco
 	['2019-02-02T12:00', '2019-02-02T19:45'],
 	# santa rosa, pliny the younger
-	['2019-02-04T01:00'],
+	['2019-02-04T01:00', '2019-03-06T12:00'],
+	# south dakota paperwork wedding
 ]
 
 gpxFolder = '/Users/logan/Downloads/Arc Monthly Export'
