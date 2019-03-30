@@ -28,6 +28,7 @@ dateRangesToInclude = [
 	# santa rosa, pliny the younger
 	['2019-02-04T01:00', '2019-03-06T12:00'],
 	# south dakota paperwork wedding
+	['2019-03-09T17:00'],
 ]
 
 gpxFolder = '/Users/logan/Downloads/Arc Monthly Export'
@@ -136,6 +137,7 @@ for trackType, tracks in tracksByType.items():
 	lineColor = {
 		'airplane': '#0000FF',
 		'car': '#FF0000',
+		'cycling': '#0000FF',
 		'walking': '#00FF00',
 	}.get(trackType, '#FF0000') # TEMP: make unknown segments red
 			
