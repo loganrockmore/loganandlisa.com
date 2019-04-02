@@ -207,6 +207,10 @@
 				height: 100%;
 			}
 			
+			div#calendar tr.event.logistical td.line div {
+				background-color: #888;
+			}
+			
 			div#calendar tr td.line.driving {
 				border-left-style: dashed;
 			}
@@ -223,6 +227,14 @@
 			div#calendar tr.event td.right {
 				padding-top: 0.5em;
 				padding-bottom: 0.5em;
+			}
+			
+			div#calendar tr.event.logistical td {
+				color: #888;
+			}
+			
+			div#calendar tr.event.logistical.highlighted td div {
+				color: black;
 			}
 			
 			div#calendar tr.event td.left div.day {
@@ -276,7 +288,7 @@
 				$("body").addClass("wakanda");
 			}
 			
-			function addEventTableViewRow(day, title, location, index) {
+			function addEventTableViewRow(day, title, location, index, logistical) {
 				const dayView = $("<div>", {"class": "day"});
 				dayView.html(day);
 				
@@ -286,7 +298,7 @@
 				const locationView = $("<div>", {"class": "location"});
 				locationView.text(location);
 				
-				addTableViewRow("event", [dayView], [titleView, locationView], undefined, undefined, index);
+				addTableViewRow("event", [dayView], [titleView, locationView], undefined, undefined, logistical, index);
 			}
 			
 			function addTravelTableViewRow(daysInBetween, modeOfTransportation, index) {
@@ -310,12 +322,18 @@
 				
 				const rowHeight = Math.max(daysInBetween * 7, 75);
 				
-				addTableViewRow("travel", [daysInBetweenView], [distanceView, distancePerDayView], rowHeight, modeOfTransportation, index);
+				addTableViewRow("travel", [daysInBetweenView], [distanceView, distancePerDayView], rowHeight, modeOfTransportation, false, index);
 			}
 			
-			function addTableViewRow(elementType, leftElement, rightElement, customRowHeight, modeOfTransportation, index) {
+			function addTableViewRow(elementType, leftElement, rightElement, customRowHeight, modeOfTransportation, logistical, index) {
+				
+				const classes = [elementType];
+				if (logistical) {
+					classes.push("logistical");
+				}
+				
 				const tableRow = $("<tr>", {
-					"class": elementType,
+					"class": classes.join(" "),
 					"id": elementType + index,
 				});
 				$("#calendar > table").append(tableRow);
@@ -372,7 +390,7 @@
 			
 			// add an event row for today
 			const formattedDay = $.datepicker.formatDate('M d', todayDate);
-			addEventTableViewRow(formattedDay, 'Today', undefined, -1);
+			addEventTableViewRow(formattedDay, 'Today', undefined, -1, false);
 			
 			// add a travel row for today
 			const firstEventMoment = moment(sortedEvents[0].startDate);
@@ -395,7 +413,7 @@
 				}
 				
 				// add event row
-				addEventTableViewRow(day, event.title, event.location, index);
+				addEventTableViewRow(day, event.title, event.location, index, event.logistical);
 				
 				// add travel row
 				const nextEvent = sortedEvents[index+1];
