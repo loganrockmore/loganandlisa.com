@@ -962,18 +962,49 @@
 							const dashArray = [2, 4];
 							
 							// add distances to the timeline
-							const distanceMeters = route.distance;
-							const distanceMiles = distanceMeters * 0.000621371192;
-							const formattedDistance = distanceMiles.toFixed(0);
-							$("#distance-" + index).text('drive ' + formattedDistance + ' miles');
-							
 							let days = parseInt($("#daysInBetween-" + index).text());
-							if (days === 0) {
-								days = 1;
+							
+							const distanceMeters = route.distance;
+							
+							if (distanceMeters > 0) {
+								
+								const distanceMiles = distanceMeters * 0.000621371192;
+								const formattedDistance = distanceMiles.toFixed(0);
+								
+								const hoursPerDayMaximum = 8;
+								
+								const durationSeconds = route.duration;
+								const durationMinutes = durationSeconds/60;
+								const durationHours = durationMinutes/60;
+								
+								var formattedDurationHours;
+								if (days === 1 && durationHours > hoursPerDayMaximum) {
+									formattedDurationHours = '<span style="color:red;">' + durationHours.toFixed(2) + ' hours</span>';
+								} else {
+									formattedDurationHours = durationHours.toFixed(2) +  ' hours';
+								}
+								
+								$("#distance-" + index).html('drive ' + formattedDistance + ' miles, '  + formattedDurationHours);
+								
+								if (days > 1) {
+									if (days === 0) {
+										days = 1;
+									}
+									const milesPerDay = distanceMiles/days;
+									const formattedDistancePerDay = milesPerDay.toFixed(0);
+									
+									const hoursPerDay = durationHours/days;
+									
+									var formattedDurationHoursPerDay;
+									if (hoursPerDay > hoursPerDayMaximum) {
+										formattedDurationHoursPerDay = '<span style="color:red;">' + hoursPerDay.toFixed(2) + ' hours per day</span>';
+									} else {
+										formattedDurationHoursPerDay = hoursPerDay.toFixed(2) +  ' hours per day';
+									}
+									
+									$("#distancePerDay-" + index).html('average ' + formattedDistancePerDay + ' miles per day, ' + formattedDurationHoursPerDay);
+								}
 							}
-							const milesPerDay = distanceMiles/days;
-							const formattedDistancePerDay = milesPerDay.toFixed(0);
-							$("#distancePerDay-" + index).text('average ' + formattedDistancePerDay + ' miles per day');
 							
 							addLayersToMap(index, geometry, dashArray);
 						});
