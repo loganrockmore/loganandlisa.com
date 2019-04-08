@@ -730,8 +730,8 @@
 			topTableRow.append($("<td>", {"class": "line flying",}).css('height', '4em'));
 			
 			// add an event row for today
-			const formattedDay = $.datepicker.formatDate('M d', todayDate);
-			addEventTableViewRow(formattedDay, 'Today', undefined, -1, false);
+			const formattedDay = $.datepicker.formatDate('D, M d', todayDate);
+			addEventTableViewRow(formattedDay, 'Today', undefined, undefined, -1, false);
 			
 			// add a travel row for today
 			const firstEventMoment = moment(sortedEvents[0].startDate);
@@ -742,8 +742,8 @@
 			_.each(sortedEvents, (event, index) => {
 				
 				// fancy format the date
-				const formattedStartDay = $.datepicker.formatDate('M d', event.startDate);
-				const formattedEndDay = $.datepicker.formatDate('M d', event.endDate);
+				const formattedStartDay = $.datepicker.formatDate('D, M d', event.startDate);
+				const formattedEndDay = $.datepicker.formatDate('D, M d', event.endDate);
 				
 				let day;
 				if (formattedStartDay === formattedEndDay) {
