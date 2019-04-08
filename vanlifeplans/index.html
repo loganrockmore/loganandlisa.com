@@ -588,11 +588,14 @@
 				font-size: 0.8em;
 			}
 			
-			div#calendar tr.event td.right div.title {
-				margin-bottom: 0.1em;
+			div#calendar tr.event td.right div.note {
+				font-size: 0.7em;
+				margin-top: 0.1em;
+				margin-bottom: 0.6em;
 			}
 			
 			div#calendar tr.event td.right div.location {
+				margin-top: 0.3em;
 				font-size: 0.7em;
 			}
 			
@@ -629,17 +632,23 @@
 				$("body").addClass("wakanda");
 			}
 			
-			function addEventTableViewRow(day, title, location, index, logistical) {
+			function addEventTableViewRow(day, title, note, location, index, logistical) {
 				const dayView = $("<div>", {"class": "day"});
 				dayView.html(day);
 				
 				const titleView = $("<div>", {"class": "title"});
 				titleView.text(title);
 				
+				var noteView = null;
+				if (note) {
+					noteView = $("<div>", {"class": "note"});
+					noteView.text(note);
+				}
+				
 				const locationView = $("<div>", {"class": "location"});
 				locationView.text(location);
 				
-				addTableViewRow("event", [dayView], [titleView, locationView], undefined, undefined, logistical, index);
+				addTableViewRow("event", [dayView], [titleView, noteView, locationView], undefined, undefined, logistical, index);
 			}
 			
 			function addTravelTableViewRow(daysInBetween, modeOfTransportation, index) {
@@ -754,7 +763,7 @@
 				}
 				
 				// add event row
-				addEventTableViewRow(day, event.title, event.location, index, event.logistical);
+				addEventTableViewRow(day, event.title, event.note, event.location, index, event.logistical);
 				
 				// add travel row
 				const nextEvent = sortedEvents[index+1];
