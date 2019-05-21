@@ -30,6 +30,11 @@ dateRangesToInclude = [
 	# south dakota paperwork wedding
 	['2019-03-09T17:00', '2019-04-09T23:00'],
 	# sf condo, georgia/flordia baseball trip
+	['2019-04-21T05:00', '2019-05-02T23:00'],
+	# monterrey mexico, new york city ipo
+	['2019-05-13T12:00', '2019-05-17T15:15'], # seattle sailing trip
+	# seattle errands
+	['2019-05-19T05:00'],
 ]
 
 gpxFolder = '/Users/logan/Downloads/Arc Monthly Export'
