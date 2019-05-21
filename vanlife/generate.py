@@ -136,11 +136,15 @@ for trackType, tracks in tracksByType.items():
 
 	# figure out the line color
 	lineColor = {
-		'airplane': '#0000FF',
-		'car': '#FF0000',
-		'cycling': '#0000FF',
-		'walking': '#00FF00',
-	}.get(trackType, '#FF0000') # TEMP: make unknown segments red
+		'airplane': '#9128DD',
+		'boat': '#4973E8',
+		'car': '#FF5E4A',
+		'cycling': '#4C23E8',
+		'walking': '#5CBA8C',
+	}.get(trackType, '#FF5E4A') # TODO: figure out what's going on here; until then, assume it's a car
+	
+	if lineColor == '#000000':
+		print "here's a transport type we don't support: ", trackType
 			
 	# append to the larger structure
 	tracksJSON.append({
