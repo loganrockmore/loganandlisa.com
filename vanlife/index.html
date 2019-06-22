@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>Vanlife Map</title>
-		<meta name="viewport" content="width=device-width, user-scalable=no" />
+		<meta name="viewport" content="width=device-width" />
 		<link rel="apple-touch-icon" href="apple-touch-icon.png?modified=1" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -25,7 +25,7 @@
 			div#map {
 				position: fixed;
 				top: 0;
-				bottom: 10;
+				bottom: 0;
 				left: 0;
 				right: 0;
 			}
@@ -43,6 +43,11 @@
 		<div id="map"></div>
 		
 		<script>
+			
+			// disable zoom
+			document.addEventListener('gesturestart', function (e) {
+				e.preventDefault();
+			});
 			
 			// create the map
 			mapboxgl.accessToken = 'pk.eyJ1IjoibG9nYW5yb2NrbW9yZSIsImEiOiJjamR0N2Nmc2EwODlsMnhsMzhhZjdqc2hxIn0.2b8odx5yDsbWAgYpGjJysw';
