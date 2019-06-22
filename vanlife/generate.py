@@ -37,7 +37,7 @@ dateRangesToInclude = [
 	['2019-05-19T05:00'],
 ]
 
-gpxFolder = '/Users/logan/Downloads/Arc Monthly Export'
+gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
 javascriptOutputFilePath = 'arcdata.js'
 
 gpxFiles = os.listdir(gpxFolder)
