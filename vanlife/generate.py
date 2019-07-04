@@ -34,7 +34,7 @@ dateRangesToInclude = [
 	# monterrey mexico, new york city ipo
 	['2019-05-13T12:00', '2019-05-17T15:15'], # seattle sailing trip
 	# seattle errands
-	['2019-05-19T05:00', '2019-07-03T04:00'],
+	['2019-05-19T05:00', '2019-07-03T00:00'],
 	# leavenworth fourth of july trip
 ]
 
