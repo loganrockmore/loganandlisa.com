@@ -72,6 +72,10 @@ tracksByType = {}
 # loop through all of the GPX files
 for gpxFile in gpxFiles:
 
+	# skip .DS_Store
+	if gpxFile == '.DS_Store':
+		continue
+
 	# parse the file
 	gpxFileContents = open(gpxFolder + '/' + gpxFile, 'r')
 	gpx = gpxpy.parse(gpxFileContents)
