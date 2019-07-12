@@ -36,6 +36,7 @@ dateRangesToInclude = [
 	# seattle errands
 	['2019-05-19T05:00', '2019-07-03T00:00'],
 	# leavenworth fourth of july trip
+	['2019-07-08T12:00'],
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
