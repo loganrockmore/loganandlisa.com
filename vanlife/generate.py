@@ -36,7 +36,10 @@ dateRangesToInclude = [
 	# seattle errands
 	['2019-05-19T05:00', '2019-07-03T00:00'],
 	# leavenworth fourth of july trip
-	['2019-07-08T12:00'],
+	['2019-07-08T12:00', '2019-07-11T22:00'],
+	# wine party weekend
+	['2019-07-15T01:00', '2019-07-19T16:00'],
+	# seattle BRASA build time
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
@@ -74,9 +77,9 @@ tracksByType = {}
 for gpxFile in gpxFiles:
 
 	# skip .DS_Store
-	if gpxFile == '.DS_Store':
+	if gpxFile == '.DS_Store' or gpxFile.endswith('.icloud'):
 		continue
-
+		
 	# parse the file
 	gpxFileContents = open(gpxFolder + '/' + gpxFile, 'r')
 	gpx = gpxpy.parse(gpxFileContents)
