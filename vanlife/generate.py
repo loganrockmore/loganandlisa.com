@@ -40,6 +40,9 @@ dateRangesToInclude = [
 	# wine party weekend
 	['2019-07-15T01:00', '2019-07-19T16:00'],
 	# seattle BRASA build time
+	['2019-08-05T01:00', '2019-08-06T23:00'],
+	# mikey and martha's wedding, burning man
+	['2019-09-04T10:00'],
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
