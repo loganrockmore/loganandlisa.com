@@ -42,7 +42,8 @@ dateRangesToInclude = [
 	# seattle BRASA build time
 	['2019-08-05T01:00', '2019-08-06T23:00'],
 	# mikey and martha's wedding, burning man
-	['2019-09-04T10:00'],
+	['2019-09-04T10:00', '2019-09-09T12:00'],
+	# philly, new york, aarhus, amsterdam, munich, iowa
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
