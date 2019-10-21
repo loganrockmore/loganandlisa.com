@@ -85,6 +85,8 @@ for gpxFile in gpxFiles:
 	if gpxFile == '.DS_Store' or gpxFile.endswith('.icloud'):
 		continue
 		
+	print "processing " + gpxFile
+	
 	# parse the file
 	gpxFileContents = open(gpxFolder + '/' + gpxFile, 'r')
 	gpx = gpxpy.parse(gpxFileContents)
