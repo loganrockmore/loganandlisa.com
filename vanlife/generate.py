@@ -48,7 +48,8 @@ dateRangesToInclude = [
 	# telluride
 	['2019-11-18T00:00', '2019-11-22T00:00'],
 	# san francisco, hawaii
-	['2019-12-05T00:00'],
+	['2019-12-05T00:00', '2019-12-19T16:00'],
+	# la crosse, minneapolis
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
