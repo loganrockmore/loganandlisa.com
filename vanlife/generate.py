@@ -51,6 +51,8 @@ dateRangesToInclude = [
 	['2019-12-05T00:00', '2019-12-19T16:00'],
 	# la crosse, minneapolis
 	['2020-01-20T00:00', '2020-01-30T00:00'],
+	# whistler
+	['2020-02-06T03:00'],
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
