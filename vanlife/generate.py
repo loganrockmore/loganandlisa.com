@@ -54,6 +54,9 @@ dateRangesToInclude = [
 	# whistler
 	['2020-02-06T03:00', '2020-02-14T08:00'],
 	# minneapolis, separate trips
+	['2020-02-24T08:00', '2020-02-25T18:00'],
+	# pittsburgh
+	['2020-02-29T06:00', '2020-03-01T22:00'],
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
