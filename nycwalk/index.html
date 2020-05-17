@@ -1,0 +1,142 @@
+<html>
+	<head>
+		<title>NYC Walking Map</title>
+		<meta name="viewport" content="width=device-width" />
+		<link rel="apple-touch-icon" href="apple-touch-icon.png?modified=1" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+		
+		<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+		<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+		
+		<script src="jquery.min.js"></script>
+		<script src='arcdata.js'></script>
+		<script src='polyline.js'></script>
+		
+		<style>
+			
+			body {
+				margin: 0px;
+				padding: 0px;
+				font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+			   font-weight: 300;
+			}
+			
+			div#map {
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+			}
+						
+			div#map div.marker {
+				width: 10px;
+				height: 10px;
+				border-radius: 5px;
+				background-color: #990000;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="map"></div>
+		
+		<script>
+			
+			// disable zoom
+			document.addEventListener('gesturestart', function (e) {
+				e.preventDefault();
+			});
+			
+			// create the map
+			mapboxgl.accessToken = 'pk.eyJ1IjoibG9nYW5yb2NrbW9yZSIsImEiOiJjamR0N2Nmc2EwODlsMnhsMzhhZjdqc2hxIn0.2b8odx5yDsbWAgYpGjJysw';
+			const map = new mapboxgl.Map({
+			    container: 'map',
+			    style: 'mapbox://styles/mapbox/light-v9'
+			});
+			
+			map.on('style.load', () => {
+				
+				// get all layer bounds
+				allLayerBounds = new mapboxgl.LngLatBounds();
+				
+				// add all of the tracks
+				$.each(tracks, function(index, track){
+					const segments = track.segments;
+					const featuresArray = [];
+					
+					$.each(segments, function(index, segment) {
+						const coordinates = polyline.decode(segment);
+						
+						featuresArray.push({
+							'type': 'Feature',
+							'geometry': {
+								'coordinates': coordinates,
+								'type': 'LineString'
+							}
+						});
+						
+						$.each(coordinates, function(index, coordinate) {
+							allLayerBounds.extend(coordinate);
+						});
+					});
+					
+					map.addLayer({
+						'id': 'route-' + index,
+						'type': 'line',
+						'source': {
+							'type': 'geojson',
+							'data': {
+								'type': 'FeatureCollection',
+								'features': featuresArray,
+							},
+						},
+						'layout': {
+						    'line-join': 'round',
+						    'line-cap': 'round'
+						},
+						'paint': {
+						    'line-color': track.lineColor,
+						    'line-width': 2
+						}
+					});
+				});
+				
+				// add the waypoints
+				/*
+				$.each(waypoints, function(index, waypoint){
+					map.addLayer({
+					    'id': 'location-' + index,
+					    'type': 'symbol',
+					    'source': {
+					        'type': 'geojson',
+					        'data': {
+					            'type': 'FeatureCollection',
+					            'features': [{
+					                'type': 'Feature',
+					                'geometry': {
+					                    'type': 'Point',
+								        'coordinates': waypoint.coord,
+					                }
+					            }]
+					        }
+					    },
+					    'layout': {
+					        'icon-image': 'circle-15',
+					    }
+					});
+					
+					allLayerBounds.extend(waypoint.coord);
+				});
+				*/
+				
+				// fit the map to the waypoints
+				map.fitBounds(allLayerBounds, {
+					padding: 50,
+				});
+			});
+			
+		</script>
+	</body>
+</html>
