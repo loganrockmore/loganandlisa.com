@@ -136,6 +136,16 @@
 					padding: 50,
 					duration: 0
 				});
+				
+				// add ability to get user location
+				map.addControl(
+					new mapboxgl.GeolocateControl({
+						positionOptions: {
+							enableHighAccuracy: true
+					},
+					trackUserLocation: true
+					})
+				);
 			});
 			
 		</script>
