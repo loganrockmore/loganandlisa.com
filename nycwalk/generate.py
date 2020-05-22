@@ -6,6 +6,7 @@ import itertools
 import json
 import polyline
 import os
+import urllib
 
 dateRangesToInclude = [
 	['2020-03-01T17:00', '2020-03-12T15:00'],
@@ -19,6 +20,8 @@ dateRangesToInclude = [
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
 javascriptOutputFilePath = 'arcdata.js'
+
+mapboxAccessToken = 'pk.eyJ1IjoibG9nYW5yb2NrbW9yZSIsImEiOiJjamR0N2Nmc2EwODlsMnhsMzhhZjdqc2hxIn0.2b8odx5yDsbWAgYpGjJysw'
 
 roundAmount = 6
 
@@ -82,7 +85,7 @@ def getTracksByType():
 			tracks[track.type].append(track)
 			
 	return tracks
-	
+
 def getEncodedPolylinesByType(tracksByType):
 	returnObject = {}
 	for trackType, tracks in tracksByType.items():
@@ -111,6 +114,73 @@ def getEncodedPolylinesByType(tracksByType):
 				
 	return returnObject
 		
+def getMapMatchedEncodedPolylinesByType(encodedPolylinesByType):
+	returnObject = {}
+	for trackType, encodedPolylines in encodedPolylinesByType.items():
+		mapMatchEncodedPolylines = []
+		for encodedPolyline in encodedPolylines:
+			allPoints = polyline.decode(encodedPolyline)
+			
+			# the API limits each call to only 100 coordinates, so let's break it up
+			limit = 100
+			pointsChunked = [allPoints[i * limit:(i + 1) * limit] for i in range((len(allPoints) + limit - 1) // limit )]
+			
+			mapMatchedEncodedPolylines = []
+			
+			for points in pointsChunked:
+				if len(points) == 1:
+					# don't call the API to map match when it's just one point
+					encodedPolyline = polyline.encode(points)
+					mapMatchedEncodedPolylines.append(encodedPolyline)
+					continue
+				
+				pointsJoinedIntoString = ';'.join(['%f,%f' % (point[0], point[1]) for point in points])
+				url = 'https://api.mapbox.com/matching/v5/mapbox/%s/%s?geometries=geojson&access_token=%s' % (trackType, pointsJoinedIntoString, mapboxAccessToken)
+				
+				# call the API
+				f = urllib.urlopen(url)
+				contents = f.read()
+				jsonContents = json.loads(contents)
+				
+				# save the polyline
+				mapMatchedEncodedPolyline = None
+				if jsonContents.has_key("matchings"):
+					matchings = jsonContents["matchings"]
+					if 0 < len(matchings):
+						matching = matchings[-1]
+						if matching.has_key("geometry"):
+							geometry = matching["geometry"]
+							coordinates = geometry["coordinates"]
+							mapMatchedEncodedPolyline = polyline.encode(coordinates)
+						else:
+							print "+ no key geometry"
+							print "   %s" % url
+							print "   %s" % jsonContents
+					else:
+						print "+ no matchings"
+						print "   %s" % url
+						print "   %s" % jsonContents
+				else:
+					print "+ no key matchings"
+					print "   %s" % url
+					print "   %s" % jsonContents
+					
+				# use a non-map matched polyline if we can't get one
+				if None == mapMatchedEncodedPolyline:
+					mapMatchedEncodedPolyline = polyline.encode(points)
+					
+				mapMatchedEncodedPolylines.append(mapMatchedEncodedPolyline)
+				
+			mapMatchEncodedPolylines.append(mapMatchedEncodedPolylines)
+		
+		# flatten the encoded polylines
+		mapMatchEncodedPolylines = [item for sublist in mapMatchEncodedPolylines for item in sublist]
+		
+		# save this object
+		returnObject[trackType] = mapMatchEncodedPolylines
+		
+	return returnObject
+	
 def getPolylineFormattedObject(encodedPolylinesByType):
 	returnObject = []
 	for trackType, encodedPolylines in encodedPolylinesByType.items():
@@ -157,5 +227,6 @@ dateTimeRanges = getDateTimeRangesArray()
 tracksByType = getTracksByType()
 encodedPolylinesByType = getEncodedPolylinesByType(tracksByType)
 walkingPolylinesByType = {'walking': encodedPolylinesByType['walking']}
-formattedObject = getPolylineFormattedObject(mapMatchedEncodedPolylinesByType)
+# mapMatchedEncodedPolylinesByType = getMapMatchedEncodedPolylinesByType(walkingPolylinesByType)
+formattedObject = getPolylineFormattedObject(walkingPolylinesByType)
 outputJavascript(javascriptOutputFilePath, formattedObject)
