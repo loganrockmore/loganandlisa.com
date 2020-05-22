@@ -88,10 +88,6 @@ def getTracksJSON(tracksByType):
 	jsonObject = []
 	for trackType, tracks in tracksByType.items():
 		
-		# only do walking
-		if trackType != 'walking':
-			continue
-		
 		trackTypeArray = []
 		
 		for index, track in enumerate(tracks):
@@ -152,5 +148,6 @@ def outputJavascript(outputFilePath, jsonObject):
 # run everything
 dateTimeRanges = getDateTimeRangesArray()
 tracksByType = getTracksByType()
-tracksJSON = getTracksJSON(tracksByType)
-outputJavascript(javascriptOutputFilePath, tracksJSON)
+allTracksJSON = getTracksJSON(tracksByType)
+walkingTracksJSON = [trackJSON for trackJSON in allTracksJSON if trackJSON['type'] == 'walking']
+outputJavascript(javascriptOutputFilePath, walkingTracksJSON)
