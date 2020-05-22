@@ -45,7 +45,6 @@ def dateTimeIsInRange(dateTime, dateTimeRanges):
 roundAmount = 6
 	
 # create global lists
-waypoints = []
 tracksByType = {}
 
 # loop through all of the GPX files
@@ -60,16 +59,6 @@ for gpxFile in gpxFiles:
 	# parse the file
 	gpxFileContents = open(gpxFolder + '/' + gpxFile, 'r')
 	gpx = gpxpy.parse(gpxFileContents)
-	
-	# add to the global list
-	for waypoint in gpx.waypoints:
-	
-		# skip if out of range
-		if not dateTimeIsInRange(waypoint.time, dateTimeRanges):
-			continue
-			
-		# add to the data structure
-		waypoints.append(waypoint)
 	
 	for track in gpx.tracks:
 		
@@ -91,16 +80,6 @@ for gpxFile in gpxFiles:
 			tracksByType[track.type] = []
 			
 		tracksByType[track.type].append(track)
-	
-# make a list of all mapbox layers for waypoints
-waypointsJSON = [{
-	'coord': [
-		round(x.longitude, roundAmount),
-		round(x.latitude, roundAmount)
-	],
-	'name': x.name,
-	'link': x.link,
-} for i,x in enumerate(waypoints)]
 
 # make a list of all mapbox layers for tracks
 tracksJSON = []
@@ -153,15 +132,6 @@ for trackType, tracks in tracksByType.items():
 javascriptOutputFile = open(javascriptOutputFilePath, 'w+')
 
 prettyPrint = False
-
-javascriptOutputFile.write('const waypoints = ')
-if prettyPrint:
-	javascriptOutputFile.write(json.dumps(waypointsJSON, indent=4, separators=(',', ': ')))
-else:
-	javascriptOutputFile.write(json.dumps(waypointsJSON))
-javascriptOutputFile.write(';')
-javascriptOutputFile.write('\n')
-javascriptOutputFile.write('\n')
 
 javascriptOutputFile.write('const tracks = ')
 if prettyPrint:
