@@ -156,6 +156,6 @@ def outputJavascript(outputFilePath, jsonObject):
 dateTimeRanges = getDateTimeRangesArray()
 tracksByType = getTracksByType()
 encodedPolylinesByType = getEncodedPolylinesByType(tracksByType)
-allTracksJSON = getPolylineFormattedObject(encodedPolylinesByType)
-walkingTracksJSON = [trackJSON for trackJSON in allTracksJSON if trackJSON['type'] == 'walking']
-outputJavascript(javascriptOutputFilePath, walkingTracksJSON)
+walkingPolylinesByType = {'walking': encodedPolylinesByType['walking']}
+formattedObject = getPolylineFormattedObject(mapMatchedEncodedPolylinesByType)
+outputJavascript(javascriptOutputFilePath, formattedObject)
