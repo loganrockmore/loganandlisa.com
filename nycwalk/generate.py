@@ -83,12 +83,11 @@ def getTracksByType():
 			
 	return tracks
 	
-def getTracksJSON(tracksByType):
-	# make a list of all mapbox layers for tracks
-	jsonObject = []
+def getEncodedPolylinesByType(tracksByType):
+	returnObject = {}
 	for trackType, tracks in tracksByType.items():
 		
-		trackTypeArray = []
+		polylinesArray = []
 		
 		for index, track in enumerate(tracks):
 			for segment in track.segments:
@@ -106,8 +105,16 @@ def getTracksJSON(tracksByType):
 				pointsArray = [k for k, g in itertools.groupby(pointsArray)]
 				encodedPolyline = polyline.encode(pointsArray)
 				
-				trackTypeArray.append(encodedPolyline)
-	
+				polylinesArray.append(encodedPolyline)
+		
+		returnObject[trackType] = polylinesArray
+				
+	return returnObject
+		
+def getPolylineFormattedObject(encodedPolylinesByType):
+	returnObject = []
+	for trackType, encodedPolylines in encodedPolylinesByType.items():
+		
 		# figure out the line color
 		lineColor = {
 			'airplane': '#9128DD',
@@ -121,13 +128,13 @@ def getTracksJSON(tracksByType):
 			print "here's a transport type we don't support: ", trackType
 				
 		# append to the larger structure
-		jsonObject.append({
+		returnObject.append({
 			'type': trackType,
 			'lineColor':  lineColor,
-			'segments': trackTypeArray,
+			'segments': encodedPolylines,
 		})
-		
-	return jsonObject
+	
+	return returnObject
 
 def outputJavascript(outputFilePath, jsonObject):
 	# print to the file
@@ -148,6 +155,7 @@ def outputJavascript(outputFilePath, jsonObject):
 # run everything
 dateTimeRanges = getDateTimeRangesArray()
 tracksByType = getTracksByType()
-allTracksJSON = getTracksJSON(tracksByType)
+encodedPolylinesByType = getEncodedPolylinesByType(tracksByType)
+allTracksJSON = getPolylineFormattedObject(encodedPolylinesByType)
 walkingTracksJSON = [trackJSON for trackJSON in allTracksJSON if trackJSON['type'] == 'walking']
 outputJavascript(javascriptOutputFilePath, walkingTracksJSON)
