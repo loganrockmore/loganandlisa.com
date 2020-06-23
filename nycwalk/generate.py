@@ -15,7 +15,9 @@ dateRangesToInclude = [
 	# costco run
 	['2020-03-24T15:00', '2020-05-16T11:00'],
 	# long island trip
-	['2020-05-16T17:00'],
+	['2020-05-16T17:00', '2020-06-21T10:00'],
+	# strawberry picking trip
+	['2020-06-21T15:00'],
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
