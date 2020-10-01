@@ -19,7 +19,11 @@ dateRangesToInclude = [
 	# strawberry picking trip
 	['2020-06-21T15:00', '2020-06-25T10:00'],
 	# reno road trip
-	['2020-07-09T12:00']
+	['2020-07-09T12:00', '2020-08-27T01:00'],
+	# long island trip to get the van repaired
+	['2020-08-27T23:00', '2020-09-06T03:00'],
+	# fire island trip, arkansas wedding road trip
+	['2020-09-23T22:00']
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
