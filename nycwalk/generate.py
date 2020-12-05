@@ -9,21 +9,7 @@ import os
 import urllib
 
 dateRangesToInclude = [
-	['2020-03-01T17:00', '2020-03-12T15:00'],
-	# phoenix trip
-	['2020-03-16T13:00', '2020-03-24T11:00'],
-	# costco run
-	['2020-03-24T15:00', '2020-05-16T11:00'],
-	# long island trip
-	['2020-05-16T17:00', '2020-06-21T10:00'],
-	# strawberry picking trip
-	['2020-06-21T15:00', '2020-06-25T10:00'],
-	# reno road trip
-	['2020-07-09T12:00', '2020-08-27T01:00'],
-	# long island trip to get the van repaired
-	['2020-08-27T23:00', '2020-09-06T03:00'],
-	# fire island trip, arkansas wedding road trip
-	['2020-09-23T22:00']
+	['2020-03-01T17:00'] # arrived in NYC on March 1, 2020
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
@@ -121,7 +107,7 @@ def getEncodedPolylinesByType(tracksByType):
 		returnObject[trackType] = polylinesArray
 				
 	return returnObject
-		
+	
 def getMapMatchedEncodedPolylinesByType(encodedPolylinesByType):
 	returnObject = {}
 	for trackType, encodedPolylines in encodedPolylinesByType.items():

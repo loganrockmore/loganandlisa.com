@@ -53,7 +53,9 @@
 			mapboxgl.accessToken = 'pk.eyJ1IjoibG9nYW5yb2NrbW9yZSIsImEiOiJjamR0N2Nmc2EwODlsMnhsMzhhZjdqc2hxIn0.2b8odx5yDsbWAgYpGjJysw';
 			const map = new mapboxgl.Map({
 			    container: 'map',
-			    style: 'mapbox://styles/mapbox/light-v9'
+			    style: 'mapbox://styles/mapbox/light-v9',
+				center: [-73.971057, 40.683502],
+				zoom: 12
 			});
 			
 			map.on('style.load', () => {
@@ -101,40 +103,6 @@
 						    'line-width': 2
 						}
 					});
-				});
-				
-				// add the waypoints
-				/*
-				$.each(waypoints, function(index, waypoint){
-					map.addLayer({
-					    'id': 'location-' + index,
-					    'type': 'symbol',
-					    'source': {
-					        'type': 'geojson',
-					        'data': {
-					            'type': 'FeatureCollection',
-					            'features': [{
-					                'type': 'Feature',
-					                'geometry': {
-					                    'type': 'Point',
-								        'coordinates': waypoint.coord,
-					                }
-					            }]
-					        }
-					    },
-					    'layout': {
-					        'icon-image': 'circle-15',
-					    }
-					});
-					
-					allLayerBounds.extend(waypoint.coord);
-				});
-				*/
-				
-				// fit the map to the waypoints
-				map.fitBounds(allLayerBounds, {
-					padding: 50,
-					duration: 0
 				});
 				
 				// add ability to get user location
