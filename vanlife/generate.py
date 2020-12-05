@@ -57,6 +57,11 @@ dateRangesToInclude = [
 	['2020-02-24T08:00', '2020-02-25T18:00'],
 	# pittsburgh
 	['2020-02-29T06:00', '2020-03-01T22:00'],
+	
+	# moved to brooklyn
+	
+	['2020-09-14T03:00', '2020-09-23T23:59'], # melissa and don's wedding trip
+	['2020-10-06T13:00', '2020-10-10T20:00'], # new england leaf peeping
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
