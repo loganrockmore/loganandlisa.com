@@ -132,12 +132,39 @@ for gpxFile in gpxFiles:
 		else:
 			# there are no segments, so it's not worth including
 			continue
+			
+		# determine the track type
+		trackType = track.type
+		
+		# override the track type for our map
+		# ================================================================
+		firstPoint = firstSegmentPoints[0]
+		firstPointDateTime = firstPoint.time
+		
+		seattleBoatTrip = ['2019-05-13T16:00', '2019-05-17T14:20']
+		delawareFerry = ['2019-06-15T11:30', '2019-06-15T13:04']
+		
+		seattleBoatTripTimes = [datetime.datetime.strptime(seattleBoatTrip[0], "%Y-%m-%dT%H:%M"), datetime.datetime.strptime(seattleBoatTrip[1], "%Y-%m-%dT%H:%M")]
+		delawareFerryTimes = [datetime.datetime.strptime(delawareFerry[0], "%Y-%m-%dT%H:%M"), datetime.datetime.strptime(delawareFerry[1], "%Y-%m-%dT%H:%M")]
+		
+		isInSeattleBoatTrip = (firstPointDateTime >= seattleBoatTripTimes[0] and
+								firstPointDateTime <= seattleBoatTripTimes[1])
+		isInDelawareFerry = (firstPointDateTime >= delawareFerryTimes[0] and
+								firstPointDateTime <= delawareFerryTimes[1])
+		
+		if isInSeattleBoatTrip or isInDelawareFerry:
+			trackType = 'boat'
+		else:
+			trackType = 'car'
+			
+		# end override
+		# ================================================================
 		
 		# add to the data structure
-		if not track.type in tracksByType:
-			tracksByType[track.type] = []
+		if not trackType in tracksByType:
+			tracksByType[trackType] = []
 			
-		tracksByType[track.type].append(track)
+		tracksByType[trackType].append(track)
 	
 # make a list of all mapbox layers for waypoints
 waypointsJSON = [{
@@ -151,7 +178,9 @@ waypointsJSON = [{
 
 # make a list of all mapbox layers for tracks
 tracksJSON = []
-for trackType, tracks in tracksByType.items():
+keysSorted = sorted(tracksByType.keys())
+for trackType in keysSorted:
+	tracks = tracksByType[trackType]
 	trackTypeArray = []
 	
 	for index, track in enumerate(tracks):
@@ -174,15 +203,13 @@ for trackType, tracks in tracksByType.items():
 
 	# figure out the line color
 	lineColor = {
-		'airplane': '#9128DD',
-		'boat': '#4973E8',
-		'car': '#FF5E4A',
-		'cycling': '#4C23E8',
-		'walking': '#5CBA8C',
-	}.get(trackType, '#FF5E4A') # TODO: figure out what's going on here; until then, assume it's a car
+		'boat': '#0098ff', # blue
+		'car': '#504f50'   # gray
+	}.get(trackType, '#000000')
 	
 	if lineColor == '#000000':
-		print "here's a transport type we don't support: ", trackType
+		print "encountered a transit type we don't support: ", trackType
+		sys.exit(1)
 			
 	# append to the larger structure
 	tracksJSON.append({
