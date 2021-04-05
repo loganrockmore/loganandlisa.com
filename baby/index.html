@@ -8,11 +8,37 @@
 		<link href="css/bootstrap.min.css" rel="stylesheet" />
 		<script src="js/bootstrap.bundle.min.js"></script>
 		
+		<script src="js/jquery-3.3.1.min.js"></script>
+		
 		<style type="text/css">
 			body {
 				font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 				letter-spacing: 0.05em;
 				background-color: #00af91;
+			}
+			
+			div#backgroundContainer {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				overflow: hidden;
+				z-index: -1;
+			}
+			
+			div#background {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 1000%;
+				
+				background-image: url('img/pattern.png');
+				background-size: 750px 750px;
+				background-position: center 0px;
+				background-repeat: repeat;
+				opacity: 0.05;
 			}
 			
 			h1, h2, h3, h4, h5, h6 {
@@ -21,6 +47,11 @@
 			
 			.container {
 				margin: 2em auto;
+				max-width: 970px
+			}
+			
+			.row {
+				margin: 0 1em;
 			}
 			
 			.divider {
@@ -49,9 +80,13 @@
 		</style>
 	</head>
 	<body>
+		<div id="backgroundContainer">
+			<div id="background"></div>
+		</div>
+		
 		<div class="container">
 			<div class="row align-items-center">
-				<div class="col-md-8" style="text-align:center;">
+				<div class="col-md-8">
 					<div class="heroimage">
 					</div>
 				</div>
@@ -111,10 +146,24 @@
 				<div class="col">
 					<div style="width: 20em; margin: 0 auto;">
 						<h3>&mdash; Lisa and Logan</h3>
-						<div style="font-size: 0.85em; color: #0a5848; text-align: left;">and Matte the Catte, who is maybe not quite as thrilled as we are that he is about to not be the center of attention</div>
+						<div style="font-size: 0.85em; color: #0a5848; text-align: left;">and Matte the Catte, who is maybe not quite as thrilled as we are that he is about to lose his spot as the center of attention <img src="img/matte.png" style="display:inline; width:40px; vertical-align: top;" /></div>
 					</div>
 				</div>
 			</div>
 		</div>
+		
+		<script>
+			
+			var scrollMultiplier = 2;
+			
+			window.addEventListener("scroll", function(event) {
+				
+				// reposition the background
+				var top = this.pageYOffset;
+				var value = top / scrollMultiplier;
+				$("#background").css("transform", "translate3d(0px, -" + value + "px, 0px)");
+			});
+			
+		</script>
 	</body>
 </html>
