@@ -2,24 +2,127 @@
 <html>
 	<head>
 		<title>Logan and Lisa</title>
-		<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		
+		<link rel="preconnect" href="https://fonts.gstatic.com"> 
+		<link href="https://fonts.googleapis.com/css2?family=Bellefair&display=swap" rel="stylesheet">
+		
+		<link href="../css/bootstrap.min.css" rel="stylesheet" />
+		<script src="../js/bootstrap.bundle.min.js"></script>
+		
+		<script src="../js/jquery-3.3.1.min.js"></script>
 		
 		<style>
-			
+		
 			body {
-				margin: 0;
-				padding: 0;
-				background-color: white;
+				background: #333;
+				color: white;
+				font-family: 'Bellefair', serif;
+				font-size: 1.5em;
+			}
+			
+			.verticallyCentered {
+				min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+				min-height: 100vh; /* These two lines are counted as one :-)       */
 				
-				background-image: url('index.jpg');
-				background-repeat: no-repeat;
-				background-attachment: fixed;
-				background-position: center;
-				background-size: contain;
+				display: flex;
+				align-items: center;
+				
+				padding: 1.5em;
+			}
+			
+			.container {
+				max-width: 800px;
+				background: white;
+				border-radius: 0.25em;
+				padding: 0.5em;
+			}
+		
+			.heroimage {
+				width: 100%;
+				padding-bottom: 0.5em;
+			}
+			
+			a {
+				color: #5b334a;
+				text-decoration: none;
+				padding: 1em 0.4em;
+				display: block;
+			}
+			
+			a:hover {
+				color: #5b334a;
+				text-decoration: underline;
+				background-color: #ddd;
+			}
+			
+			.both a {
+				text-align: center;
+			}
+			
+			.logan a {
+				text-align: right;
+				padding-right: 1em;
+			}
+			
+			.lisa a {
+				padding-left: 1em;
+			}
+			
+			@media (max-width: 768px) {
+				.both a,
+				.logan a,
+				.lisa a {
+					text-align: center;
+				}
 			}
 			
 		</style>
 	</head>
 	<body>
+		<div class="verticallyCentered">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<img src="index.jpg" class="heroimage" alt="logan, lisa and the van" />
+					</div>
+				</div>
+				<div class="row g-0">
+					<div class="col-md both">
+						<a href="baby/">we're having a baby!</a>
+					</div>
+				</div>
+				<div class="row g-0">
+					<div class="col-md logan">
+						<a href="https://instagram.com/loganrockmore">instagram @loganrockmore</a>
+					</div>
+					<div class="col-md lisa">
+						<a href="https://instagram.com/lweite">instagram @lweite</a>
+					</div>
+				</div>
+				<div class="row g-0">
+					<div class="col-md logan">
+						<a href="https://twitter.com/loganrockmore">twitter @loganrockmore</a>
+					</div>
+					<div class="col-md lisa">
+						<a href="https://twitter.com/lweite">twitter @lweite</a>
+					</div>
+				</div>
+				<div class="row g-0">
+					<div class="col-md logan">
+						<a href="http://www.loganrockmore.com/">loganrockmore.com</a>
+					</div>
+					<div class="col-md lisa">
+						<a href="http://www.lliissaa.com/">lliissaa.com</a>
+					</div>
+				</div>
+				<div class="row g-0">
+					<div class="col-md both">
+						<a href="https://www.instagram.com/cascadethecampervan/">instagram @cascadethecampervan</a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
