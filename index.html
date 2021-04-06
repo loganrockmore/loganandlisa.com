@@ -16,10 +16,34 @@
 		<style>
 		
 			body {
-				background: #333;
+				background: #aaa;
 				color: white;
 				font-family: 'Bellefair', serif;
 				font-size: 1.5em;
+			}
+			
+			div#backgroundContainer {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				overflow: hidden;
+				z-index: -1;
+			}
+			
+			div#background {
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 1000%;
+				height: 1000%;
+				
+				background-image: url('img/pattern.png');
+				background-size: 255px 268px;
+				background-position: center 0px;
+				background-repeat: repeat;
+				opacity: 0.05;
 			}
 			
 			.verticallyCentered {
@@ -81,6 +105,10 @@
 		</style>
 	</head>
 	<body>
+		<div id="backgroundContainer">
+			<div id="background"></div>
+		</div>
+		
 		<div class="verticallyCentered">
 			<div class="container">
 				<div class="row">
@@ -124,5 +152,23 @@
 				</div>
 			</div>
 		</div>
+		
+		<script>
+			
+			var scrollMultiplier = 2;
+			var currentXOffset = 0;
+			
+			setInterval(repositionBackground, 10);
+			function repositionBackground() {
+				
+				currentXOffset += 0.5;
+				
+				// reposition the background
+				var leftValue = currentXOffset / scrollMultiplier;
+				var topValue = this.pageYOffset / scrollMultiplier;
+				$("#background").css("transform", "translate3d(" + leftValue + "px, -" + topValue + "px, 0px)");
+			}
+			
+		</script>
 	</body>
 </html>
