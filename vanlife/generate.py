@@ -64,6 +64,8 @@ dateRangesToInclude = [
 	['2020-10-06T13:00', '2020-10-10T20:00'], # new england leaf peeping
 	
 	['2021-11-17T12:00', '2021-11-21T15:00'], # birthday weekend in eastern PA
+	
+	['2022-02-01T04:00', '2022-02-12T16:00'], # visit Nina and new houseboats in Minnesota/Wisconsin
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
