@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!python3
 
 import datetime
 import gpxpy
@@ -66,6 +66,7 @@ dateRangesToInclude = [
 	['2021-11-17T12:00', '2021-11-21T15:00'], # birthday weekend in eastern PA
 	
 	['2022-02-01T04:00', '2022-02-12T16:00'], # visit Nina and new houseboats in Minnesota/Wisconsin
+	['2022-05-17T04:00', '2022-06-01T20:00'], # visit Wisconsin and Milwaukee for wedding
 ]
 
 gpxFolder = '/Users/logan/Library/Mobile Documents/com~apple~CloudDocs/Arc Export for Vanlife Map'
@@ -88,7 +89,7 @@ for dateRange in dateRangesToInclude:
 	
 def dateTimeIsInRange(dateTime, dateTimeRanges):
 	for range in dateTimeRanges:
-		if dateTime >= range[0] and dateTime <= range[1]:
+		if dateTime.timestamp() >= range[0].timestamp() and dateTime.timestamp() <= range[1].timestamp():
 			return True
 	return False
 	
@@ -106,7 +107,7 @@ for gpxFile in gpxFiles:
 	if gpxFile == '.DS_Store' or gpxFile.endswith('.icloud'):
 		continue
 		
-	print "processing " + gpxFile
+	print("processing " + gpxFile)
 	
 	# parse the file
 	gpxFileContents = open(gpxFolder + '/' + gpxFile, 'r')
@@ -151,10 +152,10 @@ for gpxFile in gpxFiles:
 		seattleBoatTripTimes = [datetime.datetime.strptime(seattleBoatTrip[0], "%Y-%m-%dT%H:%M"), datetime.datetime.strptime(seattleBoatTrip[1], "%Y-%m-%dT%H:%M")]
 		delawareFerryTimes = [datetime.datetime.strptime(delawareFerry[0], "%Y-%m-%dT%H:%M"), datetime.datetime.strptime(delawareFerry[1], "%Y-%m-%dT%H:%M")]
 		
-		isInSeattleBoatTrip = (firstPointDateTime >= seattleBoatTripTimes[0] and
-								firstPointDateTime <= seattleBoatTripTimes[1])
-		isInDelawareFerry = (firstPointDateTime >= delawareFerryTimes[0] and
-								firstPointDateTime <= delawareFerryTimes[1])
+		isInSeattleBoatTrip = (firstPointDateTime.timestamp() >= seattleBoatTripTimes[0].timestamp() and
+								firstPointDateTime.timestamp() <= seattleBoatTripTimes[1].timestamp())
+		isInDelawareFerry = (firstPointDateTime.timestamp() >= delawareFerryTimes[0].timestamp() and
+								firstPointDateTime.timestamp() <= delawareFerryTimes[1].timestamp())
 		
 		if isInSeattleBoatTrip or isInDelawareFerry:
 			trackType = 'boat'
@@ -212,7 +213,7 @@ for trackType in keysSorted:
 	}.get(trackType, '#000000')
 	
 	if lineColor == '#000000':
-		print "encountered a transit type we don't support: ", trackType
+		print("encountered a transit type we don't support: ", trackType)
 		sys.exit(1)
 			
 	# append to the larger structure

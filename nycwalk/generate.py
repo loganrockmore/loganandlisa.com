@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!python3
 
 import datetime
 import gpxpy
@@ -24,7 +24,7 @@ gpxFiles.sort()
 
 def dateTimeIsInRange(dateTime, dateTimeRanges):
 	for range in dateTimeRanges:
-		if dateTime >= range[0] and dateTime <= range[1]:
+		if dateTime.timestamp() >= range[0].timestamp() and dateTime.timestamp() <= range[1].timestamp():
 			return True
 	return False
 
@@ -51,7 +51,7 @@ def getTracksByType():
 		if gpxFile == '.DS_Store' or gpxFile.endswith('.icloud'):
 			continue
 			
-		print "processing " + gpxFile
+		print("processing " + gpxFile)
 		
 		# parse the file
 		gpxFileContents = open(gpxFolder + '/' + gpxFile, 'r')
@@ -147,17 +147,17 @@ def getMapMatchedEncodedPolylinesByType(encodedPolylinesByType):
 							coordinates = geometry["coordinates"]
 							mapMatchedEncodedPolyline = polyline.encode(coordinates)
 						else:
-							print "+ no key geometry"
-							print "   %s" % url
-							print "   %s" % jsonContents
+							print("+ no key geometry")
+							print("   %s") % url
+							print("   %s") % jsonContents
 					else:
-						print "+ no matchings"
-						print "   %s" % url
-						print "   %s" % jsonContents
+						print("+ no matchings")
+						print("   %s") % url
+						print("   %s") % jsonContents
 				else:
-					print "+ no key matchings"
-					print "   %s" % url
-					print "   %s" % jsonContents
+					print("+ no key matchings")
+					print("   %s") % url
+					print("   %s") % jsonContents
 					
 				# use a non-map matched polyline if we can't get one
 				if None == mapMatchedEncodedPolyline:
@@ -189,7 +189,7 @@ def getPolylineFormattedObject(encodedPolylinesByType):
 		}.get(trackType, '#FF5E4A') # TODO: figure out what's going on here; until then, assume it's a car
 		
 		if lineColor == '#000000':
-			print "here's a transport type we don't support: ", trackType
+			print("here's a transport type we don't support: ", trackType)
 				
 		# append to the larger structure
 		returnObject.append({
